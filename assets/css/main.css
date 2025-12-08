@@ -10,8 +10,8 @@ body {
     padding: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
     font-size: 14px;
-    background-color: #f3f4f6;
-    color: #111827;
+    background: radial-gradient(circle at top left, #f4f6fb, #eef1f7 40%, #e7ebf3);
+    color: #0f172a;
 }
 
 /* links gerais: sem sublinhado, hover só muda a cor */
@@ -32,150 +32,197 @@ a:hover {
 /* =========================================================
    TOPO / NAVBAR
    ========================================================= */
-.topo {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 18px;
-    background-color: #1f2937;   /* cinza-azulado, modelo original */
-    color: #f9fafb;
-    padding: 10px 24px;
-    border-bottom: 1px solid #111827;
-    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.35);
+.app-body {
+    min-height: 100vh;
 }
 
-.topo-esq {
-    display: flex;
-    align-items: center;
-    gap: 16px;
+.app-shell {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: 100vh;
 }
 
-.topo-marca {
+.sidebar {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 22px 18px;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 18px;
+    box-shadow: 3px 0 12px rgba(15, 23, 42, 0.35);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+}
+
+.sidebar-brand .brand-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     color: inherit;
 }
 
-.marca-nome {
-    font-size: 16px;
-    font-weight: bold;
-    letter-spacing: 0.1px;
-    color: #f9fafb;   /* impede hover azul */
-}
-
-.marca-sub {
-    font-size: 13px;
-    font-weight: 600;
-    color: #9ca3af;
-}
-
-.menu-principal {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.menu-item {
-    position: relative;
-}
-
-.menu-link {
+.brand-mark {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #2563eb, #0891b2);
     display: inline-flex;
     align-items: center;
-    padding: 8px 10px;
-    border-radius: 4px;
-    color: #e5e7eb;
-    font-size: 14px;
-    background: transparent;
-    border: 1px solid transparent;
-    transition: background-color 0.12s ease, color 0.12s ease;
+    justify-content: center;
+    font-weight: 800;
+    letter-spacing: 0.5px;
 }
 
-.menu-link:hover {
-    background-color: rgba(255, 255, 255, 0.08);
-    color: #ffffff;
+.brand-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
-.has-sub:hover .submenu,
-.has-sub:focus-within .submenu {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
+.brand-title {
+    font-weight: 700;
+    color: #f8fafc;
 }
 
-.submenu {
-    position: absolute;
-    top: calc(100% + 6px);
-    left: 0;
-    min-width: 210px;
-    background: #111827;
-    border: 1px solid #1f2937;
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
-    border-radius: 6px;
-    padding: 8px;
+.brand-sub {
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+.sidebar-nav {
     display: grid;
-    gap: 4px;
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(-4px);
-    transition: opacity 0.12s ease, transform 0.12s ease;
-    z-index: 20;
+    gap: 6px;
 }
 
-.submenu a {
-    display: block;
-    padding: 8px 10px;
-    border-radius: 4px;
-    color: #e5e7eb;
-    font-size: 13px;
-    border: 1px solid transparent;
-    background: transparent;
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    color: #e2e8f0;
     transition: background-color 0.12s ease, color 0.12s ease;
 }
 
-.submenu a:hover {
+.nav-item:hover {
     background: rgba(255, 255, 255, 0.08);
     color: #ffffff;
 }
 
-.topo-dir {
+.nav-item i {
+    font-size: 16px;
+}
+
+.nav-item-ghost {
+    margin-top: auto;
+    color: #cbd5e1;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    display: grid;
+    gap: 10px;
+}
+
+.sidebar-user {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
 }
 
-.usuario-info {
-    text-align: right;
-    line-height: 1.2;
+.avatar-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    background: #1d4ed8;
+    color: #e2e8f0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
 }
 
-.usuario-nome {
-    font-size: 14px;
-    font-weight: 600;
-    color: #f9fafb;
+.sidebar-user-name {
+    font-weight: 700;
+    color: #f8fafc;
 }
 
-.usuario-meta {
+.sidebar-user-meta {
     font-size: 12px;
-    color: #9ca3af;
+    color: #cbd5e1;
+}
+
+.main-pane {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 24px 28px 32px;
+}
+
+.app-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 18px 20px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+    border: 1px solid #e2e8f0;
+}
+
+.app-header h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.app-header .welcome {
+    margin: 0;
+    color: #64748b;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.2px;
+}
+
+.app-header .header-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    color: #10b981;
+    font-weight: 600;
+}
+
+.header-search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 360px;
+}
+
+.content-shell {
+    margin-top: 20px;
 }
 
 /* =========================================================
    LAYOUT GERAL
    ========================================================= */
 main {
-    max-width: 1150px;
-    margin: 16px auto 32px;
-    padding: 0 16px 24px;      /* sem “caixa branca” em volta */
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
     background: transparent;
     border: none;
     box-shadow: none;
 }
 
 .conteudo {
-    max-width: 1150px;
+    max-width: 1400px;
     margin: 0 auto;
+    width: 100%;
 }
 
 h1, h2, h3, h4 {
@@ -229,6 +276,183 @@ h3 {
 .home-col-principal,
 .home-col-agenda {
     min-width: 0;
+}
+
+.home-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.9fr);
+    gap: 18px;
+    padding: 22px 24px;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+    margin-bottom: 22px;
+}
+
+.hero-text .eyebrow,
+.agenda-header .eyebrow {
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 700;
+    color: #2563eb;
+    margin-bottom: 6px;
+}
+
+.hero-text h2 {
+    margin: 0 0 4px;
+    font-size: 24px;
+}
+
+.hero-text .lead {
+    color: #475569;
+    margin-bottom: 14px;
+}
+
+.hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.hero-search {
+    display: grid;
+    gap: 12px;
+}
+
+.search-card {
+    display: flex;
+    gap: 10px;
+    padding: 14px 16px;
+    background: linear-gradient(135deg, #eef2ff, #eff6ff);
+    border: 1px solid #d4dffe;
+    border-radius: 12px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.search-card input {
+    flex: 1;
+    border-radius: 10px;
+    border: 1px solid #cbd5e1;
+    padding: 10px 12px;
+}
+
+.search-card button {
+    white-space: nowrap;
+}
+
+.hero-status {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 12px 14px;
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 12px;
+    color: #0f172a;
+}
+
+.status-icon {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #16a34a;
+    box-shadow: 0 0 0 6px rgba(22, 163, 74, 0.12);
+}
+
+.status-icon.success { background: #16a34a; }
+
+.tile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+}
+
+.tile {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 10px;
+    align-items: center;
+    padding: 14px 16px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+    color: inherit;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+}
+
+.tile:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.1);
+    border-color: #cbd5e1;
+    text-decoration: none;
+}
+
+.tile-disabled {
+    opacity: 0.65;
+    background: #f8fafc;
+    cursor: not-allowed;
+    border-style: dashed;
+    box-shadow: none;
+}
+
+.tile-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #2563eb, #0891b2);
+    color: #f8fafc;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.tile-more .tile-icon {
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+}
+
+.tile-body h3 {
+    margin: 0 0 4px;
+    font-size: 15px;
+}
+
+.tile-body p {
+    margin: 0;
+    color: #475569;
+    font-size: 13px;
+}
+
+.secao-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    background: #eef2ff;
+    color: #4338ca;
+    border: 1px solid #c7d2fe;
+}
+
+.pill-muted {
+    background: #f1f5f9;
+    color: #475569;
+    border-color: #e2e8f0;
+}
+
+.pill-alerta {
+    background: #fef3c7;
+    color: #92400e;
+    border-color: #fcd34d;
 }
 
 /* =========================================================
@@ -743,85 +967,77 @@ a.card:hover {
    AGENDA (COLUNA DIREITA)
    ========================================================= */
 .agenda-wrapper {
-    margin-top: 18px;
+    margin-top: 8px;
     background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-    padding: 14px 16px;
-    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 16px 18px;
+    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.08);
 }
 
 /* Cabeçalho da agenda */
 .agenda-header {
     display: flex;
-    flex-direction: column;   /* título em cima, linha meta+botões embaixo */
-    align-items: stretch;
-    gap: 6px;
-    margin-bottom: 12px;
-}
-
-/* Título centralizado */
-.agenda-header h2 {
-    margin: 0;
-    text-align: center;
-}
-
-/* Linha 2: texto à esquerda e botões à direita, na MESMA linha */
-.agenda-header-row {
-    display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     gap: 12px;
+    margin-bottom: 14px;
 }
-
-.agenda-header-row .agenda-meta {
-    flex: 1 1 auto;
-    font-size: 13px;
-    color: #6b7280;
-    padding: 0 10px;   /* alinhado com o texto das caixas da agenda */
-}
-
-/* Botões à direita, sem quebrar para baixo */
 .agenda-filtros {
     display: flex;
     gap: 8px;
     flex-shrink: 0;
-    padding: 0 10px;   /* alinhado com o texto das caixas da agenda */
 }
 
 .agenda-lista {
     display: grid;
-    gap: 10px;
+    gap: 12px;
 }
 
 .agenda-item {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 6px;
-    padding: 10px 12px;
-    border-radius: 4px;
-    border: 1px solid #e5e7eb;
-    background: #f9fafb;
+    grid-template-columns: 0.9fr 2fr;
+    gap: 14px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    align-items: center;
 }
 
-.agenda-data {
+.agenda-date-card {
+    background: #1d4ed8;
+    color: #e2e8f0;
+    padding: 10px 12px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.18);
+}
+
+.agenda-dia {
     font-weight: 700;
-    color: #111827;
-    font-size: 13px;
+    font-size: 14px;
+}
+
+.agenda-hora {
+    font-size: 12px;
+    color: #dbeafe;
 }
 
 .agenda-objeto {
     font-size: 13px;
-    color: #374151;
+    color: #0f172a;
+    display: grid;
+    gap: 6px;
 }
 
 .agenda-numero {
-    margin-bottom: 2px;
     font-weight: 700;
+    color: #0f172a;
 }
 
 .agenda-objeto-texto {
-    color: #4b5563;
+    color: #475569;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -830,17 +1046,23 @@ a.card:hover {
     font-size: 13px;
 }
 
+.agenda-atributos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
 /* meta dentro do item da agenda */
 .agenda-item .agenda-meta {
     font-size: 12px;
-    color: #6b7280;
+    color: #64748b;
 }
 
 .agenda-vazia {
-    padding: 10px 12px;
-    border-radius: 4px;
+    padding: 12px 14px;
+    border-radius: 8px;
     border: 1px dashed #d1d5db;
-    background: #f9fafb;
+    background: #f8fafc;
     color: #6b7280;
     font-size: 13px;
 }
@@ -849,25 +1071,38 @@ a.card:hover {
    RESPONSIVO
    ========================================================= */
 @media (max-width: 900px) {
-    .topo {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .menu-principal {
-        flex-wrap: wrap;
-    }
-
-    main {
-        padding: 0 12px 20px;
-    }
-
-    .home-layout {
+    .app-shell {
         grid-template-columns: 1fr;
     }
 
-    /* se quiser agenda abaixo no mobile, remova o order */
-    .home-col-agenda {
-        order: -1;
+    .sidebar {
+        position: relative;
+        height: auto;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .sidebar-nav {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+    }
+
+    .main-pane {
+        padding: 16px 14px 24px;
+    }
+
+    .app-header {
+        flex-direction: column;
+    }
+
+    .header-search {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .home-hero,
+    .home-layout {
+        grid-template-columns: 1fr;
     }
 }
