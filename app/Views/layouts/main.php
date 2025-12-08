@@ -69,9 +69,13 @@ $currentUser = Auth::user();
                 <?php endif; ?>
             </div>
         </aside>
+        <div class="sidebar-overlay" aria-hidden="true"></div>
 
         <div class="main-pane">
             <header class="app-header">
+                <button class="btn sidebar-toggle" id="sidebarToggle" type="button" aria-label="Alternar menu lateral">
+                    <i class="bi bi-list"></i>
+                </button>
                 <div class="app-header-text">
                     <p class="welcome">Bem-vindo de volta<?= $currentUser ? ', ' . htmlspecialchars($currentUser['nome_completo'] ?? $currentUser['login'] ?? '') : '' ?></p>
                     <h1>Centro de pregões e amostras</h1>
