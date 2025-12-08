@@ -13,22 +13,7 @@
         <div>
             <p class="eyebrow mb-1">Pregões</p>
             <h1 class="h4 mb-2">Cadastrar pregão base</h1>
-            <p class="text-muted mb-3">Preencha os dados do pregão R-0 com o novo visual inspirado no painel Swift.</p>
-            <div class="form-summary">
-                <?php $numeroBase = str_pad((string)($formData['id_pregao'] ?? ''), 3, '0', STR_PAD_LEFT); ?>
-                <div class="summary-card">
-                    <strong><?= $numeroBase !== '000' ? htmlspecialchars($numeroBase) : 'R-0' ?></strong>
-                    <span>Número de referência</span>
-                </div>
-                <div class="summary-card">
-                    <strong><?= htmlspecialchars((string)($formData['data_pregao'] ?? 'Agende a data')) ?></strong>
-                    <span>Data prevista do pregão</span>
-                </div>
-                <div class="summary-card">
-                    <strong><?= htmlspecialchars((string)($formData['ano_pregao'] ?? date('Y'))) ?></strong>
-                    <span>Ano do exercício</span>
-                </div>
-            </div>
+            <p class="text-muted mb-0">Preencha os dados do pregão R-0 com o novo visual inspirado no painel Swift.</p>
         </div>
         <div class="d-flex flex-column gap-2 align-items-end">
             <span class="pill">Fluxo R-0</span>
@@ -51,7 +36,7 @@
             >
                 <div class="col-12">
                     <div class="fieldset-title"><i class="bi bi-layout-text-window-reverse"></i> Identificação do pregão</div>
-                    <div class="input-grid">
+                    <div class="input-grid fixed-5">
                         <div>
                             <label class="form-label">Tipo de pregão</label>
                             <select name="id_tipo_pregao" class="form-select" required>
@@ -218,7 +203,7 @@
                                 $dataHora = '-';
                                 if (!empty($p['data_pregao'])) {
                                     $dataFormat = date('d/m/Y', strtotime($p['data_pregao']));
-                                    $horaFormat = !empty($p['hora_pregao']) ? $p['hora_pregao'] : '00:00';
+                                    $horaFormat = !empty($p['hora_pregao']) ? date('H:i', strtotime($p['hora_pregao'])) : '00:00';
                                     $dataHora = $dataFormat . ' ' . $horaFormat;
                                 }
                             ?>
