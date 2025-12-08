@@ -8,6 +8,46 @@ window.coteliModal = function (title, bodyHtml) {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+    const shell = document.querySelector('.app-shell');
+    const overlay = document.querySelector('.sidebar-overlay');
+    const toggleBtns = document.querySelectorAll('.sidebar-toggle');
+
+    const closeMobileSidebar = () => {
+        if (!shell) return;
+        shell.classList.remove('is-open');
+        if (overlay) {
+            overlay.style.opacity = '0';
+            overlay.style.visibility = 'hidden';
+        }
+    };
+
+    if (toggleBtns.length && shell) {
+        toggleBtns.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                if (window.innerWidth < 992) {
+                    const willOpen = !shell.classList.contains('is-open');
+                    shell.classList.toggle('is-open');
+                    if (overlay) {
+                        overlay.style.opacity = willOpen ? '1' : '0';
+                        overlay.style.visibility = willOpen ? 'visible' : 'hidden';
+                    }
+                } else {
+                    shell.classList.toggle('is-collapsed');
+                }
+            });
+        });
+    }
+
+    if (overlay) {
+        overlay.addEventListener('click', closeMobileSidebar);
+    }
+
+    window.addEventListener('resize', () => {
+        if (window.innerWidth >= 992) {
+            closeMobileSidebar();
+        }
+    });
+
     const applySeiMask = (input) => {
         if (!input) return;
         const format = (raw) => {
