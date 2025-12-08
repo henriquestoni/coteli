@@ -58,3 +58,8 @@ Execute `database/schema.sql` no MySQL. As tabelas de pregões e amostras possue
 ### Como obter os arquivos atualizados
 - **Enviar para o GitHub**: crie um repositório vazio e execute `git remote add origin <url>` seguido de `git push -u origin work` (ou `main`, conforme o nome do seu branch) para publicar todo o histórico.
 - **Gerar um zip localmente**: rode `scripts/export_latest.sh` para criar `dist/coteli-AAAAmmdd-HHMMSS.zip` com o conteúdo do commit atual. Use `scripts/export_latest.sh /caminho` para escolher outra pasta de saída.
+
+### Como ler linhas que começam com `@@ -209,50 +256,227 @@`
+Essas linhas aparecem em diffs/patches como marcadores de *hunks*. Elas indicam de onde cada bloco de alterações vem:
+- Depois de `@@` aparece o intervalo no arquivo original (`-209,50` = começa na linha 209 e abrange 50 linhas) e o intervalo no arquivo novo (`+256,227` = começa na linha 256 e abrange 227 linhas).
+- O trecho entre os dois `@@` não faz parte do CSS em si; é apenas um cabeçalho do diff para orientar a navegação no arquivo.
