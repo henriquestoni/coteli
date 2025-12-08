@@ -10,7 +10,7 @@ window.coteliModal = function (title, bodyHtml) {
 document.addEventListener('DOMContentLoaded', () => {
     const shell = document.querySelector('.app-shell');
     const overlay = document.querySelector('.sidebar-overlay');
-    const toggleBtn = document.getElementById('sidebarToggle');
+    const toggleBtns = document.querySelectorAll('.sidebar-toggle');
 
     const closeMobileSidebar = () => {
         if (!shell) return;
@@ -21,18 +21,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    if (toggleBtn && shell) {
-        toggleBtn.addEventListener('click', () => {
-            if (window.innerWidth < 992) {
-                const willOpen = !shell.classList.contains('is-open');
-                shell.classList.toggle('is-open');
-                if (overlay) {
-                    overlay.style.opacity = willOpen ? '1' : '0';
-                    overlay.style.visibility = willOpen ? 'visible' : 'hidden';
+    if (toggleBtns.length && shell) {
+        toggleBtns.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                if (window.innerWidth < 992) {
+                    const willOpen = !shell.classList.contains('is-open');
+                    shell.classList.toggle('is-open');
+                    if (overlay) {
+                        overlay.style.opacity = willOpen ? '1' : '0';
+                        overlay.style.visibility = willOpen ? 'visible' : 'hidden';
+                    }
+                } else {
+                    shell.classList.toggle('is-collapsed');
                 }
-            } else {
-                shell.classList.toggle('is-collapsed');
-            }
+            });
         });
     }
 

@@ -87,27 +87,27 @@ a:hover {
     padding: 22px 12px;
 }
 
-.sidebar-brand .brand-link {
+
+.sidebar-brand {
     display: flex;
     align-items: center;
     gap: 12px;
-    color: inherit;
 }
 
-
-.brand-mark {
-    width: 42px;
-    height: 42px;
-    border-radius: 12px;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    display: inline-flex;
+.sidebar-brand .brand-link {
+    display: flex;
     align-items: center;
-    justify-content: center;
-    font-weight: 800;
-    letter-spacing: 0.5px;
-    color: #fff;
-    box-shadow: 0 10px 24px rgba(106, 111, 245, 0.35);
+    gap: 10px;
+    color: inherit;
+    flex: 1;
 }
+
+.sidebar-brand .sidebar-toggle {
+    flex-shrink: 0;
+}
+
+
+
 
 .brand-text {
     display: flex;

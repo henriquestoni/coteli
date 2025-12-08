@@ -20,10 +20,12 @@ $currentUser = Auth::user();
     <div class="app-shell">
         <aside class="sidebar" aria-label="Navegação principal">
             <div class="sidebar-brand">
+                <button class="btn sidebar-toggle brand-toggle" id="sidebarToggle" type="button" aria-label="Alternar menu lateral">
+                    <i class="bi bi-list"></i>
+                </button>
                 <a href="<?= url('') ?>" class="brand-link">
-                    <span class="brand-mark">CT</span>
                     <div class="brand-text">
-                        <span class="brand-title">COTELI</span>
+                        <span class="brand-title">COTELI/DEPLICON</span>
                         <span class="brand-sub">Pregões e Amostras</span>
                     </div>
                 </a>
@@ -73,7 +75,7 @@ $currentUser = Auth::user();
 
         <div class="main-pane">
             <header class="app-header">
-                <button class="btn sidebar-toggle" id="sidebarToggle" type="button" aria-label="Alternar menu lateral">
+                <button class="btn sidebar-toggle d-lg-none" type="button" aria-label="Alternar menu lateral">
                     <i class="bi bi-list"></i>
                 </button>
                 <div class="app-header-text">
