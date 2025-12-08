@@ -1,0 +1,873 @@
+/* =========================================================
+   RESET & GERAL
+   ========================================================= */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    font-size: 14px;
+    background-color: #f3f4f6;
+    color: #111827;
+}
+
+/* links gerais: sem sublinhado, hover só muda a cor */
+a {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #1d4ed8;
+    text-decoration: none;
+}
+
+.text-muted {
+    color: #6b7280 !important;
+}
+
+/* =========================================================
+   TOPO / NAVBAR
+   ========================================================= */
+.topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    background-color: #1f2937;   /* cinza-azulado, modelo original */
+    color: #f9fafb;
+    padding: 10px 24px;
+    border-bottom: 1px solid #111827;
+    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.35);
+}
+
+.topo-esq {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.topo-marca {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    color: inherit;
+}
+
+.marca-nome {
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 0.1px;
+    color: #f9fafb;   /* impede hover azul */
+}
+
+.marca-sub {
+    font-size: 13px;
+    font-weight: 600;
+    color: #9ca3af;
+}
+
+.menu-principal {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.menu-item {
+    position: relative;
+}
+
+.menu-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 10px;
+    border-radius: 4px;
+    color: #e5e7eb;
+    font-size: 14px;
+    background: transparent;
+    border: 1px solid transparent;
+    transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.menu-link:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+}
+
+.has-sub:hover .submenu,
+.has-sub:focus-within .submenu {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.submenu {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    min-width: 210px;
+    background: #111827;
+    border: 1px solid #1f2937;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
+    border-radius: 6px;
+    padding: 8px;
+    display: grid;
+    gap: 4px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-4px);
+    transition: opacity 0.12s ease, transform 0.12s ease;
+    z-index: 20;
+}
+
+.submenu a {
+    display: block;
+    padding: 8px 10px;
+    border-radius: 4px;
+    color: #e5e7eb;
+    font-size: 13px;
+    border: 1px solid transparent;
+    background: transparent;
+    transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.submenu a:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+}
+
+.topo-dir {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.usuario-info {
+    text-align: right;
+    line-height: 1.2;
+}
+
+.usuario-nome {
+    font-size: 14px;
+    font-weight: 600;
+    color: #f9fafb;
+}
+
+.usuario-meta {
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+/* =========================================================
+   LAYOUT GERAL
+   ========================================================= */
+main {
+    max-width: 1150px;
+    margin: 16px auto 32px;
+    padding: 0 16px 24px;      /* sem “caixa branca” em volta */
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.conteudo {
+    max-width: 1150px;
+    margin: 0 auto;
+}
+
+h1, h2, h3, h4 {
+    color: #111827;
+    margin: 0;
+}
+
+h1 {
+    font-size: 22px;
+    margin-bottom: 4px;
+    font-weight: 600;
+}
+
+h2, .secao h2 {
+    margin-top: 18px;
+    margin-bottom: 12px;
+    font-size: 18px;
+    letter-spacing: 0.1px;
+    font-weight: 600;
+}
+
+h3 {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.rodape,
+.rodape-info {
+    margin-top: 0;
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.rodape {
+    text-align: center;
+    padding: 10px 16px;
+    border-top: 1px solid #e5e7eb;
+    background-color: #f9fafb;
+}
+
+/* =========================================================
+   HOME: CONTEUDO + AGENDA NA DIREITA
+   ========================================================= */
+.home-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 2.2fr) minmax(260px, 1.1fr);
+    gap: 24px;
+    align-items: flex-start;
+}
+
+.home-col-principal,
+.home-col-agenda {
+    min-width: 0;
+}
+
+/* =========================================================
+   FORMULARIOS
+   ========================================================= */
+.linha-form {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.campo {
+    flex: 1;
+    min-width: 200px;
+}
+
+label,
+.label-radio {
+    display: block;
+    font-size: 12px;
+    margin-bottom: 4px;
+    color: #374151;
+    font-weight: 600;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+select,
+textarea {
+    width: 100%;
+    padding: 6px 8px;
+    font-size: 13px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    background-color: #ffffff;
+    color: #111827;
+    min-height: 34px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    background-color: #ffffff;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.linha-form-tripla .campo-status,
+.linha-form-tripla .campo-origem,
+.linha-form-tripla .campo-processo {
+    min-width: 0;
+}
+
+.linha-form-tripla .campo-processo {
+    flex: 2;
+}
+
+.linha-texto-longo .campo-texto-longo {
+    flex: 1 1 100%;
+}
+
+.linha-radio {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 4px;
+    color: #374151;
+}
+
+.campo-radio-site {
+    min-width: 210px;
+}
+
+.campo-bloqueado input,
+.campo-bloqueado select,
+.campo-bloqueado textarea,
+input[disabled],
+select[disabled],
+textarea[disabled] {
+    background-color: #f3f4f6;
+    color: #6b7280;
+    border-color: #d1d5db;
+}
+
+/* =========================================================
+   BOTOES
+   ========================================================= */
+/* Padrão: verde (Salvar, etc) */
+button,
+.btn {
+    padding: 8px 14px;
+    font-size: 13px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    background-color: #16a34a;
+    color: #ffffff;
+    font-weight: 600;
+    letter-spacing: 0.1px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.12);
+    transition: transform 0.08s ease, box-shadow 0.12s ease, background-color 0.12s ease, border-color 0.12s ease;
+}
+
+button,
+button:visited,
+.btn,
+.btn:visited {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+button:hover,
+.btn:hover {
+    color: #ffffff;            /* mantém cor do texto */
+    text-decoration: none;     /* sem sublinhado no hover */
+    background-color: #15803d;
+    border-color: #15803d;
+    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.16);
+    transform: translateY(-1px);
+}
+
+/* aliases para primário (verde) */
+.btn-primario,
+.btn-primary,
+.btn-sucesso,
+.btn-success {
+    background-color: #16a34a;
+    border-color: #15803d;
+}
+
+.btn-primario:hover,
+.btn-primary:hover,
+.btn-sucesso:hover,
+.btn-success:hover {
+    background-color: #15803d;
+    border-color: #15803d;
+}
+
+/* Secundário: AZUL */
+.btn-secundario,
+.btn-secondary {
+    background-color: #2563eb;
+    border-color: #1d4ed8;
+    box-shadow: 0 1px 2px rgba(37, 99, 235, 0.16);
+}
+
+.btn-secundario:hover,
+.btn-secondary:hover {
+    background-color: #1d4ed8;
+    border-color: #1d4ed8;
+    color: #ffffff;
+}
+
+/* Cinza / Cancelar */
+.btn-neutro {
+    background-color: #6b7280;
+    border-color: #4b5563;
+    box-shadow: none;
+}
+
+.btn-neutro:hover {
+    background-color: #4b5563;
+    border-color: #4b5563;
+    color: #ffffff;          /* mantém branco, sem sublinhado */
+    text-decoration: none;
+}
+
+/* Perigo: vermelho */
+.btn-perigo,
+.btn-danger {
+    background-color: #dc2626;
+    border-color: #b91c1c;
+    box-shadow: 0 1px 2px rgba(220, 38, 38, 0.16);
+}
+
+.btn-perigo:hover,
+.btn-danger:hover {
+    background-color: #b91c1c;
+    border-color: #b91c1c;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.btn-compact {
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 4px;
+    box-shadow: none;
+}
+
+.botoes {
+    margin-top: 14px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* =========================================================
+   MENSAGENS
+   ========================================================= */
+.mensagem-ok {
+    background-color: #dcfce7;
+    border: 1px solid #16a34a;
+    color: #166534;
+    padding: 8px 10px;
+    margin-bottom: 12px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.mensagem-erro {
+    background-color: #fee2e2;
+    border: 1px solid #dc2626;
+    color: #991b1b;
+    padding: 8px 10px;
+    margin-bottom: 12px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.mensagem-duplicidade {
+    background-color: #fffbeb;
+    border: 1px solid #f59e0b;
+    color: #92400e;
+    padding: 8px 10px;
+    margin-bottom: 12px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.acoes-duplicidade {
+    margin-top: 8px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.acoes-duplicidade button {
+    font-size: 12px;
+    padding: 6px 10px;
+}
+
+.tag-alerta {
+    color: #dc2626;
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+/* =========================================================
+   TABELAS
+   ========================================================= */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 14px;
+    font-size: 12px;
+}
+
+th,
+td {
+    border: 1px solid #e5e7eb;
+    padding: 8px 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #f9fafb;
+    color: #111827;
+    font-weight: 700;
+}
+
+tbody tr:hover {
+    background-color: #f3f4f6;
+}
+
+/* =========================================================
+   MODAL GENERICO
+   ========================================================= */
+.modal-dup {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.modal-dup-caixa {
+    background: #ffffff;
+    border-radius: 6px;
+    padding: 18px 20px;
+    max-width: 460px;
+    width: 92%;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.25);
+    font-size: 14px;
+    border: 1px solid #e5e7eb;
+    color: #111827;
+}
+
+.modal-dup-caixa h3 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 18px;
+    color: #111827;
+}
+
+.modal-dup-info {
+    background: #f9fafb;
+    border-radius: 4px;
+    padding: 10px 12px;
+    margin: 10px 0 14px;
+    border: 1px solid #e5e7eb;
+}
+
+.modal-dup-botoes {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+.modal-dup-botoes .btn {
+    padding: 6px 10px;
+    font-size: 12px;
+}
+
+/* =========================================================
+   Modais (Bootstrap) - visual padrão do sistema
+   ========================================================= */
+
+/* Caixa do modal */
+.modal-content {
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+}
+
+/* Cabeçalho mais limpo, sem barra pesada */
+.modal-header {
+    border-bottom: none;
+    padding-bottom: 4px;
+}
+
+.modal-title {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* Corpo do modal */
+.modal-body {
+    font-size: 14px;
+}
+
+/* Caixa de resumo dentro do modal (usa alert ou div específica) */
+.modal-body .alert,
+.modal-body .modal-resumo,
+.modal-body .modal-resumo-pregao {
+    background-color: #f9fafb;
+    border-radius: 4px;
+    border: 1px solid #e5e7eb;
+    padding: 10px 12px;
+    margin: 10px 0 14px;
+}
+
+/* Rodapé do modal */
+.modal-footer {
+    border-top: none;
+    padding-top: 8px;
+}
+
+/* Botões do modal: 1º azul (ação principal), 2º verde, 3º cinza */
+.modal-footer .btn:nth-child(1) {
+    background-color: #2563eb;
+    border-color: #1d4ed8;
+}
+
+.modal-footer .btn:nth-child(1):hover {
+    background-color: #1d4ed8;
+    border-color: #1d4ed8;
+}
+
+.modal-footer .btn:nth-child(2) {
+    background-color: #16a34a;
+    border-color: #15803d;
+}
+
+.modal-footer .btn:nth-child(2):hover {
+    background-color: #15803d;
+    border-color: #15803d;
+}
+
+.modal-footer .btn:nth-child(3) {
+    background-color: #6b7280;
+    border-color: #4b5563;
+}
+
+.modal-footer .btn:nth-child(3):hover {
+    background-color: #4b5563;
+    border-color: #4b5563;
+}
+
+/* =========================================================
+   CARDS DA HOME
+   ========================================================= */
+.secao {
+    margin-bottom: 24px;
+}
+
+.grade-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+}
+
+/* No desktop, 3 cards largos + 1 coluna auto (card-mais estreito) */
+@media (min-width: 900px) {
+    .grade-cards {
+        grid-template-columns:
+            minmax(0, 1fr)
+            minmax(0, 1fr)
+            minmax(0, 1fr)
+            auto !important;   /* sobrescreve o inline "repeat(4, ...)" */
+    }
+}
+
+/* card é um <a>, por isso sobrescrevemos comportamento de link */
+.card,
+.card:visited {
+    display: block;
+    background-color: #ffffff;
+    border-radius: 6px;
+    padding: 14px 16px;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid #e5e7eb;
+    transition: border-color 0.12s ease, box-shadow 0.12s ease, transform 0.08s ease, background-color 0.08s ease;
+}
+
+.card h3 {
+    margin: 0 0 6px;
+    font-size: 15px;
+    color: #111827;
+}
+
+.card p {
+    margin: 0;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.card-mais {
+    min-height: 70px;
+    /* largura pequena, quase só a palavra "mais" */
+    width: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 8px 10px;
+    text-align: center;
+}
+
+.card-mais h3 {
+    font-size: 13px;
+    line-height: 1.1;
+    white-space: normal;   /* permite quebra entre "mais" e "..." */
+}
+
+.card-mais p {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+/* hover: escurece levemente o fundo, sem sublinhado */
+a.card:hover {
+    /* Sem efeito hover visível */
+    background-color: #ffffff;
+    border-color: #e5e7eb;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+    transform: none;
+    text-decoration: none;
+    color: #111827;
+}
+
+.card-desabilitado {
+    opacity: 0.6;
+    cursor: default;
+    box-shadow: none;
+    background-color: #f9fafb;
+}
+
+.card-desabilitado:hover {
+    border-color: #e5e7eb;
+    box-shadow: none;
+    transform: none;
+    background-color: #f9fafb;
+}
+
+/* =========================================================
+   AGENDA (COLUNA DIREITA)
+   ========================================================= */
+.agenda-wrapper {
+    margin-top: 18px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 14px 16px;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+
+/* Cabeçalho da agenda */
+.agenda-header {
+    display: flex;
+    flex-direction: column;   /* título em cima, linha meta+botões embaixo */
+    align-items: stretch;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+/* Título centralizado */
+.agenda-header h2 {
+    margin: 0;
+    text-align: center;
+}
+
+/* Linha 2: texto à esquerda e botões à direita, na MESMA linha */
+.agenda-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.agenda-header-row .agenda-meta {
+    flex: 1 1 auto;
+    font-size: 13px;
+    color: #6b7280;
+    padding: 0 10px;   /* alinhado com o texto das caixas da agenda */
+}
+
+/* Botões à direita, sem quebrar para baixo */
+.agenda-filtros {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+    padding: 0 10px;   /* alinhado com o texto das caixas da agenda */
+}
+
+.agenda-lista {
+    display: grid;
+    gap: 10px;
+}
+
+.agenda-item {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 10px 12px;
+    border-radius: 4px;
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
+}
+
+.agenda-data {
+    font-weight: 700;
+    color: #111827;
+    font-size: 13px;
+}
+
+.agenda-objeto {
+    font-size: 13px;
+    color: #374151;
+}
+
+.agenda-numero {
+    margin-bottom: 2px;
+    font-weight: 700;
+}
+
+.agenda-objeto-texto {
+    color: #4b5563;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-clamp: 2;
+    overflow: hidden;
+    font-size: 13px;
+}
+
+/* meta dentro do item da agenda */
+.agenda-item .agenda-meta {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.agenda-vazia {
+    padding: 10px 12px;
+    border-radius: 4px;
+    border: 1px dashed #d1d5db;
+    background: #f9fafb;
+    color: #6b7280;
+    font-size: 13px;
+}
+
+/* =========================================================
+   RESPONSIVO
+   ========================================================= */
+@media (max-width: 900px) {
+    .topo {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .menu-principal {
+        flex-wrap: wrap;
+    }
+
+    main {
+        padding: 0 12px 20px;
+    }
+
+    .home-layout {
+        grid-template-columns: 1fr;
+    }
+
+    /* se quiser agenda abaixo no mobile, remova o order */
+    .home-col-agenda {
+        order: -1;
+    }
+}
