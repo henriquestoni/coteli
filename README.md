@@ -54,3 +54,7 @@ Execute `database/schema.sql` no MySQL. As tabelas de pregões e amostras possue
 ### Auditoria
 - Serviço `App\Services\AuditLogger::logAction($idUsuario, $acao, $entidade, $idEntidade, $dadosAntes, $dadosDepois)`.
 - Registra CRUD e leituras sensíveis; tela de listagem em `/auditoria` (nível ≥ 4).
+
+### Como obter os arquivos atualizados
+- **Enviar para o GitHub**: crie um repositório vazio e execute `git remote add origin <url>` seguido de `git push -u origin work` (ou `main`, conforme o nome do seu branch) para publicar todo o histórico.
+- **Gerar um zip localmente**: rode `scripts/export_latest.sh` para criar `dist/coteli-AAAAmmdd-HHMMSS.zip` com o conteúdo do commit atual. Use `scripts/export_latest.sh /caminho` para escolher outra pasta de saída.
