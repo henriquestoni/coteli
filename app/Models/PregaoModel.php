@@ -72,6 +72,7 @@ class PregaoModel extends BaseModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
+<<<<<<< HEAD
     public function getPregoeiroById(int $id): ?array
     {
         $stmt = $this->db->prepare("SELECT id_usuarios, nome_completo FROM usuarios WHERE id_usuarios = :id AND is_pregoeiro = 1 AND ativo = 1 LIMIT 1");
@@ -89,6 +90,8 @@ class PregaoModel extends BaseModel
         ]);
     }
 
+=======
+>>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
     public function getResponsaveisCoteli(): array
     {
         $stmt = $this->db->query("SELECT id_usuarios, nome_completo FROM usuarios WHERE is_responsavel_coteli = 1 AND ativo = 1 ORDER BY nome_completo");
@@ -390,6 +393,7 @@ class PregaoModel extends BaseModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
+<<<<<<< HEAD
     public function getPregoesParaRepeticao(): array
     {
         $sql = <<<SQL
@@ -485,6 +489,12 @@ class PregaoModel extends BaseModel
     {
         // Regra: pega tudo dos próximos 7 dias; se total < 5, continua avançando por dia,
         // incluindo todos os eventos do dia em que a contagem atingir ou ultrapassar 5.
+=======
+    
+    public function getAgendaProximos(int $limite = 8, int $userId = 0, bool $apenasDoUsuario = true): array
+    {
+        // Busca prioritariamente nos proximos 7 dias; se vazio, devolve os 5 proximos.
+>>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
         $params = [];
         $whereUsuario = '';
         if ($apenasDoUsuario && $userId > 0) {
@@ -492,7 +502,11 @@ class PregaoModel extends BaseModel
             $params['uid'] = $userId;
         }
 
+<<<<<<< HEAD
         $sql = <<<SQL
+=======
+        $sqlBase = <<<SQL
+>>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
             SELECT
                 b.id_base_pregoes,
                 b.id_tipo_pregao,
@@ -510,6 +524,7 @@ class PregaoModel extends BaseModel
             LEFT JOIN tipos_pregao tp ON tp.id_tipos_pregao = b.id_tipo_pregao
             LEFT JOIN usuarios u1 ON u1.id_usuarios = b.id_pregoeiro
             LEFT JOIN usuarios u2 ON u2.id_usuarios = b.id_responsavel_coteli
+<<<<<<< HEAD
             WHERE b.data_pregao >= CURDATE() {$whereUsuario}
             ORDER BY b.data_pregao ASC, b.hora_pregao ASC
             LIMIT :lim
@@ -568,6 +583,34 @@ class PregaoModel extends BaseModel
         }
 
         return array_slice($selecionados, 0, $limite);
+=======
+            WHERE 1=1
+        SQL;
+
+        // Primeiro: proximos 7 dias
+        $sql7 = $sqlBase . " AND b.data_pregao BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 7 DAY) {$whereUsuario} ORDER BY b.data_pregao ASC, b.hora_pregao ASC LIMIT :lim";
+        $stmt = $this->db->prepare($sql7);
+        foreach ($params as $k => $v) {
+            $stmt->bindValue(':' . $k, $v, PDO::PARAM_INT);
+        }
+        $stmt->bindValue(':lim', $limite, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+        if (!empty($result)) {
+            return $result;
+        }
+
+        // Fallback: proximos N (padrao 5)
+        $fallbackLimite = min($limite, 5);
+        $sqlNext = $sqlBase . " AND b.data_pregao >= CURDATE() {$whereUsuario} ORDER BY b.data_pregao ASC, b.hora_pregao ASC LIMIT :lim";
+        $stmt = $this->db->prepare($sqlNext);
+        foreach ($params as $k => $v) {
+            $stmt->bindValue(':' . $k, $v, PDO::PARAM_INT);
+        }
+        $stmt->bindValue(':lim', $fallbackLimite, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+>>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
     }
     /**
      * Compatibilidade: se o banco ainda estiver com FK apontando para tabelas pregoeiros/responsaveis_coteli,
@@ -591,3 +634,9 @@ class PregaoModel extends BaseModel
         }
     }
 }
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7

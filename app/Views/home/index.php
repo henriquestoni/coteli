@@ -2,18 +2,25 @@
 /** @var array $sections */
 /** @var array|null $agenda */
 /** @var string|null $agendaScope */
+<<<<<<< HEAD
 /** @var array|null $pregoeiros */
+=======
+>>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
 
 use App\Core\Auth;
 
 $scope = $agendaScope ?? 'meus';
 $currentUser = Auth::user();
 $nivelAcesso = (int)($currentUser['nivel_acesso'] ?? 0);
+<<<<<<< HEAD
 $pregoeiros = $pregoeiros ?? [];
+=======
+>>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
 ?>
 
 <div class="home-layout">
     <div class="home-col-principal">
+<<<<<<< HEAD
         <div class="home-hero">
             <div class="hero-text">
                 <p class="eyebrow">Painel de pregões</p>
@@ -32,10 +39,56 @@ $pregoeiros = $pregoeiros ?? [];
                 </div>
             </div>
         </div>
+=======
+        <?php foreach ($sections as $section): ?>
+            <?php
+                $requiredLevel = (int)($section['required_level'] ?? 0);
+                if (!$requiredLevel && isset($section['title'])) {
+                    $tituloSecao = (string)($section['title'] ?? '');
+                    if (strpos($tituloSecao, 'Administração') === 0 || strpos($tituloSecao, 'Gestão') === 0) {
+                        $requiredLevel = 4;
+                    }
+                }
+                if ($nivelAcesso < $requiredLevel) {
+                    continue;
+                }
+
+                $cards = $section['cards'] ?? [];
+                $chunks = array_chunk($cards, 4);
+            ?>
+            <section class="secao">
+                <h2><?= htmlspecialchars($section['title']) ?></h2>
+                <?php foreach ($chunks as $linha): ?>
+                    <div class="grade-cards" style="grid-template-columns: repeat(4, minmax(0, 1fr));">
+                        <?php foreach ($linha as $card): ?>
+                            <?php $disabled = empty($card['link']); ?>
+                            <?php if ($disabled): ?>
+                                <div class="card card-desabilitado">
+                                    <h3><?= htmlspecialchars($card['title']) ?></h3>
+                                    <p><?= htmlspecialchars($card['description']) ?></p>
+                                </div>
+                            <?php else: ?>
+                                <?php $isMais = stripos($card['title'], 'mais') === 0; ?>
+                                <a href="<?= htmlspecialchars($card['link']) ?>" class="card<?= $isMais ? ' card-mais' : '' ?>">
+                                    <?php if ($isMais): ?>
+                                        <h3>mais<br>...</h3>
+                                    <?php else: ?>
+                                        <h3><?= htmlspecialchars($card['title']) ?></h3>
+                                    <?php endif; ?>
+                                    <p><?= htmlspecialchars($card['description']) ?></p>
+                                </a>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endforeach; ?>
+            </section>
+        <?php endforeach; ?>
+>>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
     </div>
 
     <aside class="home-col-agenda">
         <section class="agenda-wrapper">
+<<<<<<< HEAD
             <div class="agenda-header agenda-header-centered">
                 <div>
                     <p class="eyebrow text-center">Agenda</p>
@@ -50,6 +103,22 @@ $pregoeiros = $pregoeiros ?? [];
                        class="btn <?= $scope === 'todos' ? 'btn-primario' : 'btn-neutro' ?> btn-compact">
                         Todos
                     </a>
+=======
+            <div class="agenda-header">
+                <h2>Agenda de próximos leilões</h2>
+                <div class="agenda-header-row">
+                    <div class="agenda-meta">Próximos 7 dias (ou até 5 futuros se vazio)</div>
+                    <div class="agenda-filtros">
+                        <a href="<?= url('') ?>?agenda=meus"
+                           class="btn <?= $scope === 'todos' ? 'btn-neutro' : 'btn-primario' ?> btn-compact">
+                            Meus
+                        </a>
+                        <a href="<?= url('') ?>?agenda=todos"
+                           class="btn <?= $scope === 'todos' ? 'btn-primario' : 'btn-neutro' ?> btn-compact">
+                            Todos
+                        </a>
+                    </div>
+>>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
                 </div>
             </div>
 
@@ -86,6 +155,7 @@ $pregoeiros = $pregoeiros ?? [];
                             $processo    = trim((string)($item['processo_sei'] ?? ''));
                         ?>
                         <div class="agenda-item">
+<<<<<<< HEAD
                             <div class="agenda-date-card">
                                 <div class="agenda-dia"><?= htmlspecialchars($data) ?></div>
                                 <?php if ($hora): ?><div class="agenda-hora">às <?= htmlspecialchars($hora) ?></div><?php endif; ?>
@@ -111,6 +181,28 @@ $pregoeiros = $pregoeiros ?? [];
                                         <span class="pill pill-muted">Responsável: <?= htmlspecialchars($responsavel) ?></span>
                                     <?php endif; ?>
                                 </div>
+=======
+                            <div class="agenda-data">
+                                <?= htmlspecialchars($data) ?>
+                                <?= $hora ? ' às ' . htmlspecialchars($hora) : '' ?>
+                            </div>
+                            <div class="agenda-objeto">
+                                <div class="agenda-numero"><strong><?= htmlspecialchars($numero !== '' ? $numero : 'Pregão s/número') ?></strong></div>
+                                <?php if ($processo !== ''): ?>
+                                    <div class="agenda-meta">Processo SEI: <?= htmlspecialchars($processo) ?></div>
+                                <?php endif; ?>
+                                <div class="agenda-objeto-texto"><?= htmlspecialchars($item['objeto_licitado'] ?? 'Sem objeto informado') ?></div>
+                            </div>
+                            <div class="agenda-meta">
+                                <?php if ($pregoeiro !== ''): ?>
+                                    <div>Pregoeiro: <?= htmlspecialchars($pregoeiro) ?></div>
+                                <?php else: ?>
+                                    <div>Pregoeiro: <a href="#" class="tag-alerta" data-id="<?= (int)($item['id_base_pregoes'] ?? 0) ?>">NÃO DESIGNADO</a></div>
+                                <?php endif; ?>
+                                <?php if ($responsavel !== ''): ?>
+                                    <div>Responsável: <?= htmlspecialchars($responsavel) ?></div>
+                                <?php endif; ?>
+>>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -121,6 +213,7 @@ $pregoeiros = $pregoeiros ?? [];
         </section>
     </aside>
 </div>
+<<<<<<< HEAD
 
 <div class="modal fade" id="modalPregoeiro" tabindex="-1" aria-labelledby="modalPregoeiroLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -247,3 +340,5 @@ $pregoeiros = $pregoeiros ?? [];
         });
     });
 </script>
+=======
+>>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7

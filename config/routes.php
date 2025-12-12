@@ -18,12 +18,18 @@ return [
     '/pregoes/nova-repeticao' => ['App\\Controllers\\PregoesController', 'novaRepeticao'],
     '/pregoes/salvar-repeticao' => ['App\\Controllers\\PregoesController', 'salvarRepeticao'],
     '/pregoes/verificar-chave' => ['App\\Controllers\\PregoesController', 'verificarChave'],
+<<<<<<< HEAD
     '/pregoes/buscar'          => ['App\\Controllers\\PregoesController', 'buscarPregao'],
     '/pregoes/definir-pregoeiro' => ['App\\Controllers\\PregoesController', 'definirPregoeiro'],
     '/amostras'   => ['App\\Controllers\\AmostrasController', 'index'],
     '/amostras/nova' => ['App\\Controllers\\AmostrasController', 'nova'],
     '/amostras/salvar' => ['App\\Controllers\\AmostrasController', 'salvar'],
     '/amostras/criar-empresa' => ['App\\Controllers\\AmostrasController', 'criarEmpresa'],
+=======
+    '/amostras'   => ['App\\Controllers\\AmostrasController', 'index'],
+    '/amostras/nova' => ['App\\Controllers\\AmostrasController', 'nova'],
+    '/amostras/salvar' => ['App\\Controllers\\AmostrasController', 'salvar'],
+>>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
     '/empresas'   => ['App\\Controllers\\EmpresasController', 'index'],
     '/relatorios' => ['App\\Controllers\\RelatoriosController', 'index'],
     '/auditoria'  => ['App\\Controllers\\AuditoriaController', 'index'],
