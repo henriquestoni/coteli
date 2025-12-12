@@ -17,7 +17,7 @@ class AmostrasController extends BaseController
         $pregoesModel = new PregaoModel();
         $amostrasModel = new AmostraModel();
 
-        $pregoesR0 = $pregoesModel->getBasesR0();
+        $pregoesR0 = $pregoesModel->getPregoesParaRepeticao();
         $amostras = $pregaoId ? $amostrasModel->listarAmostrasPorPregao($pregaoId) : [];
 
         $this->render('amostras/index', [
@@ -36,7 +36,7 @@ class AmostrasController extends BaseController
 
         $this->render('amostras/form', [
             'pageTitle' => 'Nova amostra',
-            'pregoesR0' => $pregoes->getBasesR0(),
+            'pregoesR0' => $pregoes->getPregoesParaRepeticao(),
             'tiposItem' => $amostras->listarTiposLicitados(),
             'tiposParecer' => $amostras->listarTiposParecer(),
             'responsaveis' => $amostras->listarResponsaveis(),
@@ -58,7 +58,7 @@ class AmostrasController extends BaseController
                 'pageTitle' => 'Nova amostra',
                 'errorDuplicate' => $resultado['existente'] ?? null,
                 'formData' => $dados,
-                'pregoesR0' => (new PregaoModel())->getBasesR0(),
+                'pregoesR0' => (new PregaoModel())->getPregoesParaRepeticao(),
                 'tiposItem' => $amostras->listarTiposLicitados(),
                 'tiposParecer' => $amostras->listarTiposParecer(),
                 'responsaveis' => $amostras->listarResponsaveis(),
@@ -69,6 +69,32 @@ class AmostrasController extends BaseController
 
         header('Location: ' . url('amostras?id_base_pregao=' . (int)$dados['id_base_pregao']));
         exit;
+    }
+
+    public function criarEmpresa(): void
+    {
+        Auth::requireLevel(3);
+        header('Content-Type: application/json');
+        $payload = json_decode(file_get_contents('php://input') ?: '', true);
+        $nome = trim((string)($payload['nome'] ?? ''));
+        $email = trim((string)($payload['email'] ?? ''));
+        $telefone = trim((string)($payload['telefone'] ?? ''));
+        $cnpj = trim((string)($payload['cnpj'] ?? ''));
+
+        if ($nome === '' || $email === '' || $cnpj === '') {
+            http_response_code(400);
+            echo json_encode(['status' => 'erro', 'message' => 'Nome, e-mail e CNPJ são obrigatórios.']);
+            return;
+        }
+
+        try {
+            $model = new AmostraModel();
+            $id = $model->criarEmpresa($nome, $email, $telefone ?: null, $cnpj);
+            echo json_encode(['status' => 'ok', 'id' => $id, 'nome' => $nome, 'email' => $email, 'telefone' => $telefone, 'cnpj' => $cnpj]);
+        } catch (\Throwable $e) {
+            http_response_code(500);
+            echo json_encode(['status' => 'erro', 'message' => 'Não foi possível cadastrar a empresa.']);
+        }
     }
 
     private function coletarDados(array $input): array

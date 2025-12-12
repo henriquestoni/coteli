@@ -7,19 +7,31 @@
 /** @var array $formData */
 /** @var array $ultimosR0 */
 /** @var string|null $errorMessage */
+/** @var string|null $successMessage */
+/** @var string|null $successPregao */
+/** @var int|null $successProximoBase */
 ?>
 <div class="form-shell">
     <div class="form-header">
         <div>
             <p class="eyebrow mb-1">Pregões</p>
             <h1 class="h4 mb-2">Cadastrar pregão base</h1>
-            <p class="text-muted mb-0">Preencha os dados do pregão R-0 com o novo visual inspirado no painel Swift.</p>
+            <!-- Texto informativo removido a pedido do usuário -->
         </div>
         <div class="d-flex flex-column gap-2 align-items-end">
             <span class="pill">Fluxo R-0</span>
             <a href="<?= url('pregoes') ?>" class="btn btn-neutro btn-compact"><i class="bi bi-arrow-left"></i> Voltar</a>
         </div>
     </div>
+
+    <?php if (!empty($successMessage)): ?>
+        <div class="alert alert-success mb-0">
+            <?= htmlspecialchars($successMessage, ENT_QUOTES, 'UTF-8') ?>
+            <?php if (!empty($successPregao)): ?>
+                <div class="small text-muted mt-1">PregÇœo salvo: <?= htmlspecialchars($successPregao, ENT_QUOTES, 'UTF-8') ?></div>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
 
     <?php if (!empty($errorMessage)): ?>
         <div class="alert alert-danger mb-0"><?= htmlspecialchars($errorMessage, ENT_QUOTES, 'UTF-8') ?></div>
@@ -127,7 +139,7 @@
 
                 <div class="col-12">
                     <div class="fieldset-title"><i class="bi bi-journal-text"></i> Objeto licitado</div>
-                    <textarea name="objeto_licitado" class="form-control" rows="3" required><?= htmlspecialchars((string)($formData['objeto_licitado'] ?? ''), ENT_QUOTES, 'UTF-8') ?></textarea>
+                    <textarea name="objeto_licitado" class="form-control" rows="4" required><?= htmlspecialchars((string)($formData['objeto_licitado'] ?? ''), ENT_QUOTES, 'UTF-8') ?></textarea>
                 </div>
 
                 <div class="col-12">
@@ -223,3 +235,43 @@
         </div>
     <?php endif; ?>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const sucessoCadastro = <?= !empty($successMessage) ? 'true' : 'false' ?>;
+        const sucessoDescricao = <?= json_encode($successPregao ?? '') ?>;
+        const sucessoProxBase = <?= json_encode($successProximoBase ?? null) ?>;
+        const inputNumero = document.querySelector('input[name="id_pregao"]');
+
+        if (sucessoCadastro) {
+            const proxFmt = sucessoProxBase ? String(sucessoProxBase).padStart(3, '0') : '';
+            const corpo = `
+                <p class="mb-2">PregÇœo base salvo com sucesso.</p>
+                ${sucessoDescricao ? `<div class="alert alert-light border mb-3"><strong>PregÇœo:</strong> ${sucessoDescricao}</div>` : ''}
+                ${proxFmt ? `<p class="mb-3">PrÇüximo nÇ§mero sugerido: <strong>${proxFmt}</strong>.</p>` : ''}
+                <div class="d-flex flex-column gap-2">
+                    <button type="button" class="btn btn-primario" id="btnNovoPregaoSucesso">Cadastrar novo pregÇœo</button>
+                    <button type="button" class="btn btn-neutro" id="btnCancelarPregaoSucesso">Cancelar</button>
+                </div>
+            `;
+            window.coteliModal('PregÇœo salvo', corpo);
+            setTimeout(() => {
+                const modalEl = document.getElementById('modalInfo');
+                const instance = modalEl ? bootstrap.Modal.getInstance(modalEl) : null;
+                const btnNovo = document.getElementById('btnNovoPregaoSucesso');
+                const btnCanc = document.getElementById('btnCancelarPregaoSucesso');
+                if (btnNovo) {
+                    btnNovo.onclick = () => {
+                        if (instance) instance.hide();
+                        inputNumero && inputNumero.focus();
+                    };
+                }
+                if (btnCanc) {
+                    btnCanc.onclick = () => {
+                        window.location.href = '<?= url('') ?>';
+                    };
+                }
+            }, 50);
+        }
+    });
+</script>

@@ -11,12 +11,12 @@
             <?php foreach ($section['cards'] as $card): ?>
                 <?php $disabled = empty($card['link']); ?>
                 <?php if ($disabled): ?>
-                    <div class="card card-desabilitado">
+                    <div class="cad-card cad-card-disabled">
                         <h3><?= htmlspecialchars($card['title']) ?></h3>
                         <p><?= htmlspecialchars($card['description']) ?></p>
                     </div>
                 <?php else: ?>
-                    <a href="<?= htmlspecialchars($card['link']) ?>" class="card">
+                    <a href="<?= htmlspecialchars($card['link']) ?>" class="cad-card">
                         <h3><?= htmlspecialchars($card['title']) ?></h3>
                         <p><?= htmlspecialchars($card['description']) ?></p>
                     </a>

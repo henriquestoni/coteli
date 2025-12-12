@@ -18,6 +18,7 @@ class HomeController extends BaseController
 
         $pregaoModel = new PregaoModel();
         $agenda      = $pregaoModel->getAgendaProximos(8, $userId, $agendaScope === 'meus');
+        $pregoeiros  = $pregaoModel->getPregoeiros();
 
         $sections = [
             [
@@ -54,6 +55,7 @@ class HomeController extends BaseController
             'sections'    => $sections,
             'agenda'      => $agenda,
             'agendaScope' => $agendaScope,
+            'pregoeiros'  => $pregoeiros,
         ]);
     }
 }

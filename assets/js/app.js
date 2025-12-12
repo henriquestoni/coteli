@@ -222,10 +222,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const repInput = form.querySelector('input[name="id_pregao_repeticao"]');
         if (repInput) {
-            repInput.addEventListener('input', () => {
-                const v = parseInt(repInput.value || '0', 10);
-                repInput.value = v > 0 ? v : '';
-            });
+            const formatRep = () => {
+                const digits = (repInput.value || '').replace(/\D/g, '').slice(0, 2);
+                if (!digits) {
+                    repInput.value = '';
+                    return;
+                }
+                repInput.value = digits.padStart(2, '0');
+            };
+            repInput.addEventListener('input', formatRep);
+            repInput.addEventListener('blur', formatRep);
+            formatRep();
         }
     };
 

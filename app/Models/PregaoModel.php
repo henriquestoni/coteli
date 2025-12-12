@@ -72,6 +72,23 @@ class PregaoModel extends BaseModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
+    public function getPregoeiroById(int $id): ?array
+    {
+        $stmt = $this->db->prepare("SELECT id_usuarios, nome_completo FROM usuarios WHERE id_usuarios = :id AND is_pregoeiro = 1 AND ativo = 1 LIMIT 1");
+        $stmt->execute(['id' => $id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row ?: null;
+    }
+
+    public function definirPregoeiro(int $idBasePregao, int $idPregoeiro): void
+    {
+        $stmt = $this->db->prepare('UPDATE base_pregoes SET id_pregoeiro = :pregoeiro, updated_at = NOW() WHERE id_base_pregoes = :id');
+        $stmt->execute([
+            'pregoeiro' => $idPregoeiro,
+            'id' => $idBasePregao,
+        ]);
+    }
+
     public function getResponsaveisCoteli(): array
     {
         $stmt = $this->db->query("SELECT id_usuarios, nome_completo FROM usuarios WHERE is_responsavel_coteli = 1 AND ativo = 1 ORDER BY nome_completo");
@@ -373,10 +390,101 @@ class PregaoModel extends BaseModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
+    public function getPregoesParaRepeticao(): array
+    {
+        $sql = <<<SQL
+            SELECT
+                b.id_base_pregoes,
+                b.id_tipo_pregao,
+                b.ano_pregao,
+                b.id_pregao,
+                b.id_pregao_repeticao,
+                b.data_pregao,
+                b.hora_pregao,
+                b.id_status,
+                b.id_origem_pedido,
+                b.processo_sei,
+                b.objeto_licitado,
+                b.id_pregoeiro,
+                b.id_responsavel_coteli,
+                b.lancado_site_uerj,
+                tp.sigla_tipos_pregao
+            , tp.nome_tipos_pregao,
+                op.unidade_origem,
+                sp.nome_status_pregao,
+                u1.nome_completo AS nome_pregoeiro,
+                u2.nome_completo AS nome_responsavel
+            FROM base_pregoes b
+            LEFT JOIN tipos_pregao tp ON tp.id_tipos_pregao = b.id_tipo_pregao
+            LEFT JOIN origens_pedido op ON op.id_origens_pedido = b.id_origem_pedido
+            LEFT JOIN status_pregao sp ON sp.id_status_pregao = b.id_status
+            LEFT JOIN usuarios u1 ON u1.id_usuarios = b.id_pregoeiro
+            LEFT JOIN usuarios u2 ON u2.id_usuarios = b.id_responsavel_coteli
+            ORDER BY b.ano_pregao DESC, b.id_tipo_pregao ASC, b.id_pregao DESC, b.id_pregao_repeticao DESC
+        SQL;
+        $stmt = $this->db->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+    }
+
+    public function getPregaoCompletoById(int $id): ?array
+    {
+        $sql = <<<SQL
+            SELECT
+                b.*,
+                tp.sigla_tipos_pregao,
+                tp.nome_tipos_pregao,
+                op.unidade_origem,
+                sp.nome_status_pregao,
+                u1.nome_completo AS nome_pregoeiro,
+                u2.nome_completo AS nome_responsavel
+            FROM base_pregoes b
+            LEFT JOIN tipos_pregao tp ON tp.id_tipos_pregao = b.id_tipo_pregao
+            LEFT JOIN origens_pedido op ON op.id_origens_pedido = b.id_origem_pedido
+            LEFT JOIN status_pregao sp ON sp.id_status_pregao = b.id_status
+            LEFT JOIN usuarios u1 ON u1.id_usuarios = b.id_pregoeiro
+            LEFT JOIN usuarios u2 ON u2.id_usuarios = b.id_responsavel_coteli
+            WHERE b.id_base_pregoes = :id
+            LIMIT 1
+        SQL;
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row ?: null;
+    }
+
+    public function getUltimasRepeticoes(int $limite = 5): array
+    {
+        $sql = <<<SQL
+            SELECT
+                b.id_base_pregoes,
+                b.id_tipo_pregao,
+                b.ano_pregao,
+                b.id_pregao,
+                b.id_pregao_repeticao,
+                b.data_pregao,
+                b.hora_pregao,
+                tp.sigla_tipos_pregao,
+                op.unidade_origem,
+                sp.nome_status_pregao
+            FROM base_pregoes b
+            LEFT JOIN tipos_pregao tp ON tp.id_tipos_pregao = b.id_tipo_pregao
+            LEFT JOIN origens_pedido op ON op.id_origens_pedido = b.id_origem_pedido
+            LEFT JOIN status_pregao sp ON sp.id_status_pregao = b.id_status
+            WHERE b.id_pregao_repeticao > 0
+            ORDER BY b.id_base_pregoes DESC
+            LIMIT :lim
+        SQL;
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':lim', $limite, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+    }
+
     
     public function getAgendaProximos(int $limite = 8, int $userId = 0, bool $apenasDoUsuario = true): array
     {
-        // Busca prioritariamente nos proximos 7 dias; se vazio, devolve os 5 proximos.
+        // Regra: pega tudo dos próximos 7 dias; se total < 5, continua avançando por dia,
+        // incluindo todos os eventos do dia em que a contagem atingir ou ultrapassar 5.
         $params = [];
         $whereUsuario = '';
         if ($apenasDoUsuario && $userId > 0) {
@@ -384,7 +492,7 @@ class PregaoModel extends BaseModel
             $params['uid'] = $userId;
         }
 
-        $sqlBase = <<<SQL
+        $sql = <<<SQL
             SELECT
                 b.id_base_pregoes,
                 b.id_tipo_pregao,
@@ -402,32 +510,64 @@ class PregaoModel extends BaseModel
             LEFT JOIN tipos_pregao tp ON tp.id_tipos_pregao = b.id_tipo_pregao
             LEFT JOIN usuarios u1 ON u1.id_usuarios = b.id_pregoeiro
             LEFT JOIN usuarios u2 ON u2.id_usuarios = b.id_responsavel_coteli
-            WHERE 1=1
+            WHERE b.data_pregao >= CURDATE() {$whereUsuario}
+            ORDER BY b.data_pregao ASC, b.hora_pregao ASC
+            LIMIT :lim
         SQL;
-
-        // Primeiro: proximos 7 dias
-        $sql7 = $sqlBase . " AND b.data_pregao BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 7 DAY) {$whereUsuario} ORDER BY b.data_pregao ASC, b.hora_pregao ASC LIMIT :lim";
-        $stmt = $this->db->prepare($sql7);
+        $stmt = $this->db->prepare($sql);
         foreach ($params as $k => $v) {
             $stmt->bindValue(':' . $k, $v, PDO::PARAM_INT);
         }
-        $stmt->bindValue(':lim', $limite, PDO::PARAM_INT);
+        $stmt->bindValue(':lim', max($limite * 4, 40), PDO::PARAM_INT); // pega uma janela maior para aplicar a lógica em PHP
         $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
-        if (!empty($result)) {
-            return $result;
+        $todos = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+
+        if (empty($todos)) {
+            return [];
         }
 
-        // Fallback: proximos N (padrao 5)
-        $fallbackLimite = min($limite, 5);
-        $sqlNext = $sqlBase . " AND b.data_pregao >= CURDATE() {$whereUsuario} ORDER BY b.data_pregao ASC, b.hora_pregao ASC LIMIT :lim";
-        $stmt = $this->db->prepare($sqlNext);
-        foreach ($params as $k => $v) {
-            $stmt->bindValue(':' . $k, $v, PDO::PARAM_INT);
+        $hoje = new \DateTimeImmutable('today');
+        $limite7 = $hoje->modify('+7 days');
+        $selecionados = [];
+        $ultimaDataIncluida = null;
+
+        // Primeiro, inclui tudo até 7 dias
+        foreach ($todos as $idx => $row) {
+            $dataRow = !empty($row['data_pregao']) ? new \DateTimeImmutable($row['data_pregao']) : null;
+            if ($dataRow && $dataRow <= $limite7) {
+                $selecionados[] = $row;
+                $ultimaDataIncluida = $dataRow->format('Y-m-d');
+                unset($todos[$idx]);
+            }
         }
-        $stmt->bindValue(':lim', $fallbackLimite, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+
+        // Se já tem 5 ou mais, retorna (respeitando limite máximo)
+        if (count($selecionados) >= 5) {
+            return array_slice($selecionados, 0, $limite);
+        }
+
+        // Caso contrário, avança por dia completo até completar pelo menos 5
+        $porDia = [];
+        foreach ($todos as $row) {
+            $dataRow = !empty($row['data_pregao']) ? (new \DateTimeImmutable($row['data_pregao']))->format('Y-m-d') : null;
+            if (!$dataRow) {
+                continue;
+            }
+            $porDia[$dataRow][] = $row;
+        }
+
+        ksort($porDia);
+        foreach ($porDia as $dia => $lista) {
+            if (count($selecionados) >= 5) {
+                break;
+            }
+            foreach ($lista as $row) {
+                $selecionados[] = $row;
+            }
+            $ultimaDataIncluida = $dia;
+        }
+
+        return array_slice($selecionados, 0, $limite);
     }
     /**
      * Compatibilidade: se o banco ainda estiver com FK apontando para tabelas pregoeiros/responsaveis_coteli,
@@ -451,6 +591,3 @@ class PregaoModel extends BaseModel
         }
     }
 }
-
-
-

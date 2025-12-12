@@ -12,11 +12,23 @@
 <form method="get" class="card mb-3">
     <div class="card-body row g-3 align-items-end">
         <div class="col-md-6">
-            <label class="form-label mb-1">Pregão (R-0)</label>
+            <label class="form-label mb-1">Pregão (R-0 ou R-X)</label>
             <select name="id_base_pregao" class="form-select">
                 <option value="">Selecione...</option>
                 <?php foreach ($pregoesR0 as $p): ?>
-                    <?php $label = ($p['sigla_tipos_pregao'] ?? '') . ' ' . ($p['id_pregao'] ?? '') . '/' . ($p['ano_pregao'] ?? '') . ' (R-0)'; ?>
+                    <?php
+                        $sigla = trim((string)($p['sigla_tipos_pregao'] ?? ''));
+                        $num = str_pad((string)($p['id_pregao'] ?? ''), 3, '0', STR_PAD_LEFT);
+                        $ano = (string)($p['ano_pregao'] ?? '');
+                        $rep = (int)($p['id_pregao_repeticao'] ?? 0);
+                        $repLabel = 'R-' . str_pad((string)$rep, 2, '0', STR_PAD_LEFT);
+                        $labelNumero = ($sigla !== '' ? $sigla . ' ' : '') . $num . '/' . $ano . ' (' . $repLabel . ')';
+                        $processo = trim((string)($p['processo_sei'] ?? ''));
+                        $label = $labelNumero;
+                        if ($processo !== '') {
+                            $label .= ' - ' . $processo;
+                        }
+                    ?>
                     <option value="<?= (int)$p['id_base_pregoes'] ?>" <?= ((int)($pregaoSelecionado ?? 0) === (int)$p['id_base_pregoes']) ? 'selected' : '' ?>>
                         <?= htmlspecialchars($label) ?>
                     </option>
