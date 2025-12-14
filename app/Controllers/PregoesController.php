@@ -110,14 +110,9 @@ class PregoesController extends BaseController
         $formData = $dados;
         $formData['lancado_site_uerj'] = $dados['lancado_site_uerj'] ?? 0;
 
-<<<<<<< HEAD
         $erroCampos = $this->validarObrigatoriosBase($dados);
         if ($erroCampos !== null) {
             $errorMessage = $erroCampos;
-=======
-        if (empty($dados['data_do'])) {
-            $errorMessage = 'Publicacao no D.O. e obrigatoria.';
->>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
             $this->render('pregoes/form_base', array_merge(
                 $this->combos($model),
                 [
@@ -131,7 +126,6 @@ class PregoesController extends BaseController
         }
 
         try {
-<<<<<<< HEAD
             $idCriado = $model->createBaseR0($dados);
             $pregaoCriado = $model->getPregaoCompletoById($idCriado);
             $sigla = trim((string)($pregaoCriado['sigla_tipos_pregao'] ?? ''));
@@ -168,11 +162,6 @@ class PregoesController extends BaseController
                 ]
             ));
             return;
-=======
-            $model->createBaseR0($dados);
-            header('Location: ' . url('pregoes'));
-            exit;
->>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
         } catch (PregaoDuplicadoException $e) {
             $errorMessage = $e->getMessage();
         } catch (\Throwable $e) {
@@ -197,7 +186,6 @@ class PregoesController extends BaseController
 
         $prefillBase = (int)($_GET['id_base_pregao_r0'] ?? 0);
         $prefillRep = (int)($_GET['rep_sugerida'] ?? 1);
-<<<<<<< HEAD
         $lockBase = $prefillBase > 0;
         $lockRep = $prefillBase > 0 && $prefillRep > 0;
 
@@ -225,29 +213,16 @@ class PregoesController extends BaseController
                 ]);
             }
         }
-=======
->>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
 
         $this->render('pregoes/form_repeticao', array_merge(
             $this->combos($model),
             [
                 'pageTitle' => 'Nova repeticao (R-X)',
-<<<<<<< HEAD
                 'bases' => $model->getPregoesParaRepeticao(),
                 'ultimasReps' => $model->getUltimasRepeticoes(),
                 'formData' => $formDataDefault,
                 'lockBaseSelecionada' => $lockBase,
                 'lockRepeticaoCampo' => $lockRep,
-=======
-                'basesR0' => $model->getBasesR0(),
-                'formData' => [
-                    'id_base_pregao_r0' => $prefillBase,
-                    'id_pregao_repeticao' => $prefillRep ?: 1,
-                    'lancado_site_uerj' => 0,
-                    'data_pregao' => '',
-                    'hora_pregao' => '',
-                ],
->>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
             ]
         ));
     }
@@ -260,28 +235,17 @@ class PregoesController extends BaseController
         $baseId = (int)($_POST['id_base_pregao_r0'] ?? 0);
         $base = $baseId ? $model->getBaseById($baseId) : null;
 
-<<<<<<< HEAD
         if (!$base) {
             $errorMessage = 'Pregao nao encontrado.';
-=======
-        if (!$base || (int)$base['id_pregao_repeticao'] !== 0) {
-            $errorMessage = 'Pregao base (R-0) nao encontrado ou invalido.';
->>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
             $this->render('pregoes/form_repeticao', array_merge(
                 $this->combos($model),
                 [
                     'pageTitle' => 'Nova repeticao (R-X)',
-<<<<<<< HEAD
                     'bases' => $model->getPregoesParaRepeticao(),
                     'formData' => $_POST,
                     'errorMessage' => $errorMessage,
                     'lockBaseSelecionada' => !empty($_POST['lock_base']),
                     'lockRepeticaoCampo' => !empty($_POST['lock_rep']),
-=======
-                    'basesR0' => $model->getBasesR0(),
-                    'formData' => $_POST,
-                    'errorMessage' => $errorMessage,
->>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
                 ]
             ));
             return;
@@ -289,7 +253,6 @@ class PregoesController extends BaseController
 
         $dados = $this->coletarDadosRepeticao($_POST, $base, $model);
         $formData = $dados + ['id_base_pregao_r0' => $baseId];
-<<<<<<< HEAD
         $editId = (int)($_POST['id_base_pregoes_edit'] ?? 0);
 
         $erroCampos = $this->validarObrigatoriosRepeticao($dados);
@@ -394,13 +357,6 @@ class PregoesController extends BaseController
                 ]
             ));
             return;
-=======
-
-        try {
-            $model->createRepeticao($dados);
-            header('Location: ' . url('pregoes'));
-            exit;
->>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
         } catch (PregaoDuplicadoException $e) {
             $errorMessage = $e->getMessage();
         } catch (\Throwable $e) {
@@ -411,23 +367,16 @@ class PregoesController extends BaseController
             $this->combos($model),
             [
                 'pageTitle' => 'Nova repeticao (R-X)',
-<<<<<<< HEAD
                 'bases' => $model->getPregoesParaRepeticao(),
                 'ultimasReps' => $model->getUltimasRepeticoes(),
                 'formData' => $formData,
                 'errorMessage' => $errorMessage ?? null,
                 'lockBaseSelecionada' => !empty($_POST['lock_base']),
                 'lockRepeticaoCampo' => !empty($_POST['lock_rep']),
-=======
-                'basesR0' => $model->getBasesR0(),
-                'formData' => $formData,
-                'errorMessage' => $errorMessage ?? null,
->>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
             ]
         ));
     }
 
-<<<<<<< HEAD
     public function buscarPregao(): void
     {
         Auth::requireLevel(4);
@@ -494,8 +443,6 @@ class PregoesController extends BaseController
         }
     }
 
-=======
->>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
     private function combos(PregaoModel $model): array
     {
         return [
@@ -555,7 +502,6 @@ class PregoesController extends BaseController
             'lancado_site_uerj'     => isset($input['lancado_site_uerj']) ? (int)$input['lancado_site_uerj'] : 0,
         ];
     }
-<<<<<<< HEAD
 
     private function validarObrigatoriosBase(array $dados): ?string
     {
@@ -628,6 +574,4 @@ class PregoesController extends BaseController
         }
         return null;
     }
-=======
->>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
 }

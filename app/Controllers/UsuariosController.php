@@ -109,6 +109,11 @@ class UsuariosController extends BaseController
                 $erros[] = 'Nome completo é obrigatório.';
             }
             $nivel = (int)($_POST['nivel_acesso'] ?? 1);
+            $currentUser = Auth::user();
+            $nivelAtual = (int)($currentUser['nivel_acesso'] ?? 1);
+            if ($nivelAtual === 4) {
+                $nivel = 4; // nível 4 só define 4
+            }
             if ($nivel < 1 || $nivel > 5) {
                 $erros[] = 'Nível de acesso deve estar entre 1 e 5.';
             }
@@ -122,6 +127,11 @@ class UsuariosController extends BaseController
                     'is_pregoeiro' => !empty($_POST['is_pregoeiro']) ? 1 : 0,
                     'is_responsavel_coteli' => !empty($_POST['is_responsavel_coteli']) ? 1 : 0,
                 ];
+                if ($nivelAtual === 5) {
+                    $dados['nivel_acesso'] = $nivel;
+                } else {
+                    $dados['nivel_acesso'] = 4;
+                }
                 $resultado = $model->gerarAcesso($dados + ['id' => $postId]);
                 $usuario = $resultado['usuario'] ?? null;
             }
@@ -137,10 +147,18 @@ class UsuariosController extends BaseController
 
     public function primeiroAcesso(): void
     {
-        Auth::requireLogin(true);
-        $usuario = Auth::user();
+        $pending = Auth::pendingUser();
+        $usuario = $_SESSION['pending_code_user'] ?? (Auth::user() ?? $pending);
 
-        if (empty($usuario['precisa_trocar_senha'])) {
+        if (!$usuario) {
+            header('Location: ' . url('login'));
+            exit;
+        }
+
+        $mustChange = (!empty($usuario['trocar_senha']) && (int)$usuario['trocar_senha'] === 1)
+            || empty($usuario['senha_hash']);
+
+        if (!$mustChange) {
             header('Location: ' . url(''));
             exit;
         }
@@ -152,27 +170,95 @@ class UsuariosController extends BaseController
             $novaSenha = (string)($_POST['nova_senha'] ?? '');
             $confirmaSenha = (string)($_POST['confirmar_senha'] ?? '');
             $novoLogin = isset($_POST['login']) ? trim((string)$_POST['login']) : null;
+            $codigoInformado = isset($_POST['codigo']) ? trim((string)$_POST['codigo']) : '';
 
             if ($novaSenha === '' || $confirmaSenha === '') {
                 $erros[] = 'Informe a nova senha e a confirmação.';
+            } elseif (strlen($novaSenha) < 8) {
+                $erros[] = 'A senha deve ter pelo menos 8 caracteres.';
             } elseif ($novaSenha !== $confirmaSenha) {
                 $erros[] = 'A confirmação de senha não confere.';
             }
 
             if (!$erros) {
-                $model->atualizarSenhaDefinitiva((int)$usuario['id_usuarios'], $novaSenha, $novoLogin);
-                $atualizado = $model->findById((int)$usuario['id_usuarios']);
-                if ($atualizado) {
-                    $atualizado['id'] = $atualizado['id_usuarios'];
-                    Auth::login($atualizado);
+                if ($codigoInformado === '') {
+                    $erros[] = 'Informe o código enviado ao seu e-mail.';
+                } elseif (!$model->validarCodigoPrimeiroAcesso((int)$usuario['id_usuarios'], $codigoInformado)) {
+                    $erros[] = 'Código inválido ou expirado.';
                 }
-                header('Location: ' . url(''));
+            }
+
+            if (!$erros) {
+                $model->atualizarSenhaDefinitiva((int)$usuario['id_usuarios'], $novaSenha, $novoLogin);
+                if (isset($_SESSION['pending_user'])) unset($_SESSION['pending_user']);
+                if (isset($_SESSION['pending_code_user'])) unset($_SESSION['pending_code_user']);
+                Auth::logout();
+                header('Location: ' . url('login?status=senha-criada'));
                 exit;
             }
         }
 
         $this->render('usuarios/primeiro_acesso', [
             'pageTitle' => 'Primeiro acesso',
+            'usuario' => $usuario,
+            'errors' => $erros,
+        ]);
+    }
+
+    public function perfil(): void
+    {
+        Auth::requireLogin();
+        $usuario = Auth::user();
+        $erros = [];
+        $ok = false;
+        $model = new UserModel();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $nome = trim((string)($_POST['nome_completo'] ?? ''));
+            $email = trim((string)($_POST['email'] ?? ''));
+            $login = trim((string)($_POST['login'] ?? ''));
+            $senhaAtual = (string)($_POST['senha_atual'] ?? '');
+            $novaSenha = (string)($_POST['nova_senha'] ?? '');
+            $confirma = (string)($_POST['confirmar_senha'] ?? '');
+
+            if ($nome === '') $erros[] = 'Nome é obrigatório.';
+            if ($email === '') $erros[] = 'E-mail é obrigatório.';
+            if ($login === '') $erros[] = 'Login é obrigatório.';
+
+            if (!$erros) {
+                $model->updatePerfil((int)$usuario['id_usuarios'], [
+                    'nome_completo' => $nome,
+                    'email' => $email,
+                    'login' => $login,
+                ]);
+                $usuario['nome_completo'] = $nome;
+                $usuario['email'] = $email;
+                $usuario['login'] = $login;
+                Auth::login($usuario);
+                $ok = true;
+            }
+
+            if ($novaSenha !== '' || $confirma !== '') {
+                if (strlen($novaSenha) < 8) {
+                    $erros[] = 'A nova senha deve ter pelo menos 8 caracteres.';
+                } elseif ($novaSenha !== $confirma) {
+                    $erros[] = 'Confirmação da nova senha não confere.';
+                } elseif (empty($usuario['senha_hash']) || password_verify($senhaAtual, $usuario['senha_hash'])) {
+                    $model->atualizarSenha((int)$usuario['id_usuarios'], $novaSenha);
+                    $ok = true;
+                } else {
+                    $erros[] = 'Senha atual incorreta.';
+                }
+            }
+
+            if ($ok && !$erros) {
+                header('Location: ' . url('perfil?status=ok'));
+                exit;
+            }
+        }
+
+        $this->render('usuarios/perfil', [
+            'pageTitle' => 'Meu perfil',
             'usuario' => $usuario,
             'errors' => $erros,
         ]);

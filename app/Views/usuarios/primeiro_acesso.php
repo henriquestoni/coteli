@@ -17,20 +17,19 @@
                 <?php endif; ?>
 
                 <form method="post" action="<?= url('usuarios/primeiro-acesso') ?>" class="row g-3">
-                    <?php if (empty($usuario['login']) || ($usuario['login'] === $usuario['email'])): ?>
-                        <div class="col-12">
-                            <label class="form-label">Login</label>
-                            <input type="text" name="login" class="form-control" value="<?= htmlspecialchars((string)($usuario['login'] ?? '')) ?>" placeholder="sugerido: antes do @ do e-mail">
-                        </div>
-                    <?php endif; ?>
+                    <div class="col-12">
+                        <label class="form-label">Código recebido</label>
+                        <input type="text" name="codigo" class="form-control" maxlength="6" pattern="\d{6}" placeholder="6 dígitos" required>
+                        <div class="form-text">Verifique seu e-mail e informe o código enviado. Validade: 30 minutos.</div>
+                    </div>
 
                     <div class="col-12">
                         <label class="form-label">Nova senha</label>
-                        <input type="password" name="nova_senha" class="form-control" required>
+                        <input type="password" name="nova_senha" class="form-control" required minlength="8">
                     </div>
                     <div class="col-12">
                         <label class="form-label">Confirmar nova senha</label>
-                        <input type="password" name="confirmar_senha" class="form-control" required>
+                        <input type="password" name="confirmar_senha" class="form-control" required minlength="8">
                     </div>
 
                     <div class="col-12 text-end">

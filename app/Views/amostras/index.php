@@ -12,7 +12,6 @@
 <form method="get" class="card mb-3">
     <div class="card-body row g-3 align-items-end">
         <div class="col-md-6">
-<<<<<<< HEAD
             <label class="form-label mb-1">Pregão (R-0 ou R-X)</label>
             <select name="id_base_pregao" class="form-select">
                 <option value="">Selecione...</option>
@@ -30,13 +29,6 @@
                             $label .= ' - ' . $processo;
                         }
                     ?>
-=======
-            <label class="form-label mb-1">Pregão (R-0)</label>
-            <select name="id_base_pregao" class="form-select">
-                <option value="">Selecione...</option>
-                <?php foreach ($pregoesR0 as $p): ?>
-                    <?php $label = ($p['sigla_tipos_pregao'] ?? '') . ' ' . ($p['id_pregao'] ?? '') . '/' . ($p['ano_pregao'] ?? '') . ' (R-0)'; ?>
->>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
                     <option value="<?= (int)$p['id_base_pregoes'] ?>" <?= ((int)($pregaoSelecionado ?? 0) === (int)$p['id_base_pregoes']) ? 'selected' : '' ?>>
                         <?= htmlspecialchars($label) ?>
                     </option>

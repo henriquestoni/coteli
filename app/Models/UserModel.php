@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Core\BaseModel;
 use PDO;
 use PDOException;
+use DateTimeImmutable;
 
 class UserModel extends BaseModel
 {
@@ -13,6 +14,40 @@ class UserModel extends BaseModel
         $sql = 'SELECT * FROM usuarios ORDER BY nome_completo';
         $stmt = $this->db->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+    }
+
+    public function createUser(array $data): int
+    {
+        $senhaHash = password_hash($data['senha'], PASSWORD_DEFAULT);
+        $stmt = $this->db->prepare('INSERT INTO usuarios (nome_completo, email, login, senha_hash, nivel_acesso, ativo, trocar_senha, criado_em, atualizado_em) VALUES (:nome, :email, :login, :senha, :nivel, 1, 0, NOW(), NOW())');
+        $stmt->execute([
+            'nome' => $data['nome_completo'],
+            'email' => $data['email'],
+            'login' => $data['login'],
+            'senha' => $senhaHash,
+            'nivel' => 1,
+        ]);
+        return (int)$this->db->lastInsertId();
+    }
+
+    public function updatePerfil(int $id, array $data): void
+    {
+        $stmt = $this->db->prepare('UPDATE usuarios SET nome_completo = :nome, email = :email, login = :login, atualizado_em = NOW() WHERE id_usuarios = :id');
+        $stmt->execute([
+            'nome' => $data['nome_completo'],
+            'email' => $data['email'],
+            'login' => $data['login'],
+            'id' => $id,
+        ]);
+    }
+
+    public function atualizarSenha(int $id, string $novaSenha): void
+    {
+        $stmt = $this->db->prepare('UPDATE usuarios SET senha_hash = :senha, trocar_senha = 0, atualizado_em = NOW() WHERE id_usuarios = :id');
+        $stmt->execute([
+            'senha' => password_hash($novaSenha, PASSWORD_DEFAULT),
+            'id' => $id,
+        ]);
     }
 
     public function findById(int $id): ?array
@@ -26,7 +61,7 @@ class UserModel extends BaseModel
     public function findForAuth(string $loginOuEmail): ?array
     {
         try {
-            $stmt = $this->db->prepare('SELECT * FROM usuarios WHERE (login = :login OR email = :login) AND senha_hash IS NOT NULL AND ativo = 1 LIMIT 1');
+            $stmt = $this->db->prepare('SELECT * FROM usuarios WHERE (login = :login OR email = :login) AND ativo = 1 LIMIT 1');
             $stmt->execute(['login' => $loginOuEmail]);
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
             if ($result && !isset($result['id']) && isset($result['id_usuarios'])) {
@@ -169,7 +204,7 @@ class UserModel extends BaseModel
             $login = $this->gerarLoginUnico(trim($novoLogin), $id);
         }
 
-        $sql = 'UPDATE usuarios SET senha_hash = :senha_hash, precisa_trocar_senha = 0, atualizado_em = NOW()';
+        $sql = 'UPDATE usuarios SET senha_hash = :senha_hash, trocar_senha = 0, atualizado_em = NOW()';
         $params = [
             'senha_hash' => password_hash($novaSenha, PASSWORD_DEFAULT),
             'id' => $id,
@@ -196,6 +231,52 @@ class UserModel extends BaseModel
     {
         $stmt = $this->db->query('SELECT id_usuarios, nome_completo FROM usuarios WHERE is_responsavel_coteli = 1 AND ativo = 1 ORDER BY nome_completo');
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+    }
+
+    public function registrarCodigoPrimeiroAcesso(int $userId, string $codigo, DateTimeImmutable $expiraEm): void
+    {
+        $this->ensureCodigosTable();
+        $stmt = $this->db->prepare('INSERT INTO usuarios_codigos (id_usuario, codigo, expira_em, usado) VALUES (:uid, :codigo, :expira, 0)');
+        $stmt->execute([
+            'uid' => $userId,
+            'codigo' => $codigo,
+            'expira' => $expiraEm->format('Y-m-d H:i:s'),
+        ]);
+    }
+
+    public function validarCodigoPrimeiroAcesso(int $userId, string $codigo): bool
+    {
+        $this->ensureCodigosTable();
+        $stmt = $this->db->prepare('SELECT id, expira_em, usado FROM usuarios_codigos WHERE id_usuario = :uid AND codigo = :codigo ORDER BY id DESC LIMIT 1');
+        $stmt->execute(['uid' => $userId, 'codigo' => $codigo]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$row) {
+            return false;
+        }
+        if ((int)($row['usado'] ?? 0) === 1) {
+            return false;
+        }
+        $expira = new DateTimeImmutable($row['expira_em']);
+        if ($expira < new DateTimeImmutable('now')) {
+            return false;
+        }
+        $this->db->prepare('UPDATE usuarios_codigos SET usado = 1 WHERE id = :id')->execute(['id' => (int)$row['id']]);
+        return true;
+    }
+
+    private function ensureCodigosTable(): void
+    {
+        $sql = <<<SQL
+            CREATE TABLE IF NOT EXISTS usuarios_codigos (
+                id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                id_usuario INT NOT NULL,
+                codigo VARCHAR(6) NOT NULL,
+                expira_em DATETIME NOT NULL,
+                usado TINYINT NOT NULL DEFAULT 0,
+                criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        SQL;
+        $this->db->exec($sql);
     }
 
     private function gerarLoginUnico(string $base, ?int $ignoreId = null): string

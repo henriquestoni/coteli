@@ -10,17 +10,10 @@ class AmostraModel extends BaseModel
     public function listarAmostrasPorPregao(int $idBasePregao, array $filtros = []): array
     {
         $sql = <<<SQL
-<<<<<<< HEAD
             SELECT a.*, u.nome_completo AS nome_responsavel, e.nome_empresas AS nome_empresa, tp.nome_tipos_parecer
             FROM base_amostras a
             LEFT JOIN usuarios u ON u.id_usuarios = a.id_responsavel
             LEFT JOIN empresas e ON e.id_empresas = a.id_empresa
-=======
-            SELECT a.*, u.nome_completo AS nome_responsavel, e.nome AS nome_empresa, tp.nome_tipos_parecer
-            FROM base_amostras a
-            LEFT JOIN usuarios u ON u.id_usuarios = a.id_responsavel
-            LEFT JOIN empresas e ON e.id = a.id_empresa
->>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
             LEFT JOIN tipos_parecer tp ON tp.id_tipos_parecer = a.id_tipo_parecer
             WHERE a.id_base_pregao = :id
             ORDER BY a.item_licitado ASC, a.id_base_amostras DESC
@@ -137,7 +130,6 @@ class AmostraModel extends BaseModel
 
     public function listarEmpresas(): array
     {
-<<<<<<< HEAD
         $stmt = $this->db->query('SELECT id_empresas AS id, nome_empresas AS nome, email_empresas AS email, telefone_empresas AS telefone, cnpj_empresas AS cnpj FROM empresas ORDER BY nome_empresas');
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
@@ -154,12 +146,6 @@ class AmostraModel extends BaseModel
         return (int)$this->db->lastInsertId();
     }
 
-=======
-        $stmt = $this->db->query('SELECT id, nome FROM empresas ORDER BY nome');
-        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
-    }
-
->>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
     private function buscarDuplicidade(int $idBasePregao, string $item, int $idTipoParecer, ?int $ignoreId = null): ?array
     {
         $sql = 'SELECT * FROM base_amostras WHERE id_base_pregao = :id_base_pregao AND item_licitado = :item AND id_tipo_parecer = :parecer';

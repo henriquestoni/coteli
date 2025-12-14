@@ -8,7 +8,6 @@ window.coteliModal = function (title, bodyHtml) {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-<<<<<<< HEAD
     const shell = document.querySelector('.app-shell');
     const overlay = document.querySelector('.sidebar-overlay');
     const toggleBtns = document.querySelectorAll('.sidebar-toggle');
@@ -65,8 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const shortcutObserver = new MutationObserver(() => removeShortcutBadge());
     shortcutObserver.observe(document.body, { childList: true, subtree: true });
 
-=======
->>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
     const applySeiMask = (input) => {
         if (!input) return;
         const format = (raw) => {
@@ -143,7 +140,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     const idBase = data.pregao?.id_base_pregoes ?? '';
                     const repNum = data.pregao?.proxima_repeticao_num ?? '';
 
-<<<<<<< HEAD
                     const descricaoUsuario = (data.pregao?.descricao_resumida ?? '').replace(/\s*\(R-0+\)\s*$/i, '');
                     const body = `
                         <p>Já existe um pregão cadastrado com as informações abaixo:</p>
@@ -155,18 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="d-flex flex-wrap gap-2 justify-content-end modal-dup-botoes">
                             <button type="button" class="btn btn-primario" id="btnModalNovoPregao">Cadastrar pregão disponível (1)</button>
                             <button type="button" class="btn btn-sucesso" id="btnModalNovaRep">Cadastrar repetição sugerida (2)</button>
-=======
-                    const body = `
-                        <p>Já existe um pregão cadastrado com as informações abaixo:</p>
-                        <div class="alert alert-light border">
-                            <div><strong>Número atual:</strong> ${data.pregao?.descricao_resumida ?? ''}</div>
-                            <div><strong>Próximo pregão disponível:</strong> ${sugBase}</div>
-                            <div><strong>Próxima repetição sugerida:</strong> ${sugRep}</div>
-                        </div>
-                        <div class="d-flex flex-wrap gap-2 justify-content-end modal-dup-botoes">
-                            <button type="button" class="btn btn-primario" id="btnModalNovoPregao">Cadastrar novo pregão</button>
-                            <button type="button" class="btn btn-sucesso" id="btnModalNovaRep">Criar nova repetição</button>
->>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
                         </div>
                     `;
                     window.coteliModal('Pregão já cadastrado', body);
@@ -174,7 +158,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     setTimeout(() => {
                         const btnNovo = document.getElementById('btnModalNovoPregao');
                         const btnRep = document.getElementById('btnModalNovaRep');
-<<<<<<< HEAD
                         const modalEl = document.getElementById('modalInfo');
                         const onKeyChoice = (ev) => {
                             if (!modalEl || !modalEl.classList.contains('show')) return;
@@ -192,21 +175,14 @@ document.addEventListener('DOMContentLoaded', () => {
                                 document.removeEventListener('keydown', onKeyChoice);
                             }, { once: true });
                         }
-=======
->>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
                         if (btnNovo) {
                             btnNovo.onclick = () => {
                                 if (sugBase) {
                                     const numero = (sugBase.split(' ')[1] || '').split('/')[0] || '';
                                     numInput.value = numero.padStart(3, '0');
                                 }
-<<<<<<< HEAD
                                 const modalEl2 = document.getElementById('modalInfo');
                                 const modal = bootstrap.Modal.getInstance(modalEl2);
-=======
-                                const modalEl = document.getElementById('modalInfo');
-                                const modal = bootstrap.Modal.getInstance(modalEl);
->>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
                                 modal && modal.hide();
                                 setTimeout(() => numInput.focus(), 100);
                             };
@@ -246,7 +222,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const repInput = form.querySelector('input[name="id_pregao_repeticao"]');
         if (repInput) {
-<<<<<<< HEAD
             const formatRep = () => {
                 const digits = (repInput.value || '').replace(/\D/g, '').slice(0, 2);
                 if (!digits) {
@@ -258,12 +233,6 @@ document.addEventListener('DOMContentLoaded', () => {
             repInput.addEventListener('input', formatRep);
             repInput.addEventListener('blur', formatRep);
             formatRep();
-=======
-            repInput.addEventListener('input', () => {
-                const v = parseInt(repInput.value || '0', 10);
-                repInput.value = v > 0 ? v : '';
-            });
->>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
         }
     };
 

@@ -25,18 +25,12 @@
                 <form method="post" action="<?= url('amostras/salvar') ?>" class="row g-3">
                     <input type="hidden" name="id_momento_cadastro" value="<?= htmlspecialchars((string)($formData['id_momento_cadastro'] ?? '')) ?>">
 
-<<<<<<< HEAD
                     <div class="col-12">
                         <label class="form-label">Selecione o Pregão:</label>
-=======
-                    <div class="col-md-6">
-                        <label class="form-label">Pregão (R-0)</label>
->>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
                         <select name="id_base_pregao" class="form-select" required>
                             <option value="">Selecione...</option>
                             <?php foreach ($pregoesR0 as $p): ?>
                                 <?php
-<<<<<<< HEAD
                                     $sigla = trim((string)($p['sigla_tipos_pregao'] ?? ''));
                                     $num = str_pad((string)($p['id_pregao'] ?? ''), 3, '0', STR_PAD_LEFT);
                                     $ano = (string)($p['ano_pregao'] ?? '');
@@ -45,9 +39,6 @@
                                     $processo = trim((string)($p['processo_sei'] ?? ''));
                                     $labelNumero = ($sigla !== '' ? $sigla . ' ' : '') . $num . '/' . $ano . ' (' . $repLabel . ')';
                                     $label = $labelNumero . ($processo !== '' ? ' - ' . $processo : '');
-=======
-                                    $label = ($p['sigla_tipos_pregao'] ?? '') . ' ' . ($p['id_pregao'] ?? '') . '/' . ($p['ano_pregao'] ?? '') . ' (R-0)';
->>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
                                 ?>
                                 <option value="<?= (int)$p['id_base_pregoes'] ?>" <?= ((int)($formData['id_base_pregao'] ?? 0) === (int)$p['id_base_pregoes']) ? 'selected' : '' ?>>
                                     <?= htmlspecialchars($label) ?>
@@ -55,7 +46,6 @@
                             <?php endforeach; ?>
                         </select>
                     </div>
-<<<<<<< HEAD
 
                     <div class="col-12">
                         <div class="row g-2 align-items-center">
@@ -160,87 +150,6 @@
                                 <input type="date" name="data_parecer" class="form-control" value="<?= htmlspecialchars((string)($formData['data_parecer'] ?? '')) ?>">
                             </div>
                         </div>
-=======
-                    <div class="col-md-3">
-                        <label class="form-label">Item licitado (3 dígitos)</label>
-                        <input type="text" name="item_licitado" maxlength="3" pattern="\\d{3}" class="form-control" value="<?= htmlspecialchars((string)($formData['item_licitado'] ?? '')) ?>" required>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Total unidades</label>
-                        <input type="number" step="0.01" name="total_unidades" class="form-control" value="<?= htmlspecialchars((string)($formData['total_unidades'] ?? '' )) ?>">
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label">Tipo do item</label>
-                        <select name="id_tipo_item" class="form-select">
-                            <option value="">Selecione...</option>
-                            <?php foreach ($tiposItem as $t): ?>
-                                <option value="<?= (int)$t['id_tipos_licitados'] ?>" <?= ((int)($formData['id_tipo_item'] ?? 0) === (int)$t['id_tipos_licitados']) ? 'selected' : '' ?>>
-                                    <?= htmlspecialchars($t['nome_tipos_licitados'] ?? '') ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Responsável</label>
-                        <select name="id_responsavel" class="form-select">
-                            <option value="">Selecione...</option>
-                            <?php foreach ($responsaveis as $r): ?>
-                                <option value="<?= (int)$r['id_usuarios'] ?>" <?= ((int)($formData['id_responsavel'] ?? 0) === (int)$r['id_usuarios']) ? 'selected' : '' ?>>
-                                    <?= htmlspecialchars($r['nome_completo'] ?? '') ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Empresa</label>
-                        <select name="id_empresa" class="form-select">
-                            <option value="">Selecione...</option>
-                            <?php foreach ($empresas as $e): ?>
-                                <option value="<?= (int)$e['id'] ?>" <?= ((int)($formData['id_empresa'] ?? 0) === (int)$e['id']) ? 'selected' : '' ?>>
-                                    <?= htmlspecialchars($e['nome'] ?? '') ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label">Tipo de parecer</label>
-                        <select name="id_tipo_parecer" class="form-select" required>
-                            <option value="">Selecione...</option>
-                            <?php foreach ($tiposParecer as $tp): ?>
-                                <option value="<?= (int)$tp['id_tipos_parecer'] ?>" <?= ((int)($formData['id_tipo_parecer'] ?? 0) === (int)$tp['id_tipos_parecer']) ? 'selected' : '' ?>>
-                                    <?= htmlspecialchars($tp['nome_tipos_parecer'] ?? '') ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                        <div class="form-text">Chave única: pregão + item + parecer.</div>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Data do parecer</label>
-                        <input type="date" name="data_parecer" class="form-control" value="<?= htmlspecialchars((string)($formData['data_parecer'] ?? '')) ?>">
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label d-block">Entregue na COTELI?</label>
-                        <div class="form-check mt-2">
-                            <input class="form-check-input" type="checkbox" name="entregue_coteli" value="1" <?= !empty($formData['entregue_coteli']) ? 'checked' : '' ?>>
-                            <label class="form-check-label">Sim</label>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label">Chegada na COTELI</label>
-                        <input type="datetime-local" name="chegada_coteli" class="form-control" value="<?= htmlspecialchars((string)($formData['chegada_coteli'] ?? '')) ?>">
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Saída da COTELI</label>
-                        <input type="datetime-local" name="saida_coteli" class="form-control" value="<?= htmlspecialchars((string)($formData['saida_coteli'] ?? '')) ?>">
-                    </div>
-
-                    <div class="col-12">
-                        <label class="form-label">Observações</label>
-                        <textarea name="observacoes" class="form-control" rows="2"><?= htmlspecialchars((string)($formData['observacoes'] ?? '')) ?></textarea>
->>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
                     </div>
 
                     <div class="col-12 text-end">
@@ -252,7 +161,6 @@
         </div>
     </div>
 </div>
-<<<<<<< HEAD
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -414,5 +322,3 @@ document.addEventListener('DOMContentLoaded', () => {
     atualizarDatas();
 });
 </script>
-=======
->>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7

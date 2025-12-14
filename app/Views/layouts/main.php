@@ -7,15 +7,11 @@ $currentUser = Auth::user();
 <html lang="pt-BR">
 <head>
     <meta charset="utf-8">
-<<<<<<< HEAD
     <meta name="viewport" content="width=device-width, initial-scale=1">
-=======
->>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
     <title>COTELI | Sistema de Pregões e Amostras</title>
 
     <!-- Bootstrap 5 via CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<<<<<<< HEAD
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <!-- Seu CSS -->
     <link rel="stylesheet" href="<?= asset('assets/css/main.css') ?>">
@@ -98,42 +94,6 @@ $currentUser = Auth::user();
             </main>
         </div>
     </div>
-=======
-    <!-- Seu CSS -->
-    <link rel="stylesheet" href="<?= asset('assets/css/main.css') ?>">
-</head>
-<body>
-    <header class="topo">
-        <div class="topo-esq">
-            <a class="topo-marca" href="<?= url('') ?>">
-                <span class="marca-nome">Sistema de Pregões e Amostras</span>
-                <span class="marca-sub">COTELI / DEPLICON</span>
-            </a>
-            <nav class="menu-principal" aria-label="Navegação principal">
-                <a class="menu-link" href="<?= url('cadastros') ?>">Cadastros</a>
-                <a class="menu-link" href="<?= url('relatorios') ?>">Relatórios</a>
-                <a class="menu-link" href="<?= url('usuarios') ?>">Gestão do Sistema</a>
-            </nav>
-        </div>
-        <div class="topo-dir">
-            <?php if ($currentUser): ?>
-                <div class="usuario-info">
-                    <div class="usuario-nome"><?= htmlspecialchars($currentUser['nome_completo'] ?? $currentUser['login'] ?? 'Usuário') ?></div>
-                    <div class="usuario-meta">Nível <?= htmlspecialchars((string)($currentUser['nivel_acesso'] ?? '?')) ?></div>
-                </div>
-                <a href="<?= url('logout') ?>" class="btn btn-neutro btn-compact">Sair</a>
-            <?php else: ?>
-                <a href="<?= url('login') ?>" class="btn btn-primario btn-compact">Entrar</a>
-            <?php endif; ?>
-        </div>
-    </header>
-
-    <main>
-        <div class="conteudo">
-            <?= $content ?? '' ?>
-        </div>
-    </main>
->>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
 
     <!-- Modal genérico para reuso em telas -->
     <div class="modal fade" id="modalInfo" tabindex="-1" aria-labelledby="modalInfoLabel" aria-hidden="true">
@@ -146,12 +106,6 @@ $currentUser = Auth::user();
                 <div class="modal-body">
                     Conteúdo aqui.
                 </div>
-<<<<<<< HEAD
-=======
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-neutro" data-bs-dismiss="modal">Fechar</button>
-                </div>
->>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
             </div>
         </div>
     </div>
@@ -162,9 +116,5 @@ $currentUser = Auth::user();
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
     <script src="<?= asset('assets/js/app.js') ?>"></script>
-<<<<<<< HEAD
-=======
-    <script src="<?= asset('assets/js/agenda-modal.js') ?>"></script>
->>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
 </body>
 </html>

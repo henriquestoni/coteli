@@ -17,11 +17,7 @@ class AmostrasController extends BaseController
         $pregoesModel = new PregaoModel();
         $amostrasModel = new AmostraModel();
 
-<<<<<<< HEAD
         $pregoesR0 = $pregoesModel->getPregoesParaRepeticao();
-=======
-        $pregoesR0 = $pregoesModel->getBasesR0();
->>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
         $amostras = $pregaoId ? $amostrasModel->listarAmostrasPorPregao($pregaoId) : [];
 
         $this->render('amostras/index', [
@@ -40,11 +36,7 @@ class AmostrasController extends BaseController
 
         $this->render('amostras/form', [
             'pageTitle' => 'Nova amostra',
-<<<<<<< HEAD
             'pregoesR0' => $pregoes->getPregoesParaRepeticao(),
-=======
-            'pregoesR0' => $pregoes->getBasesR0(),
->>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
             'tiposItem' => $amostras->listarTiposLicitados(),
             'tiposParecer' => $amostras->listarTiposParecer(),
             'responsaveis' => $amostras->listarResponsaveis(),
@@ -66,11 +58,7 @@ class AmostrasController extends BaseController
                 'pageTitle' => 'Nova amostra',
                 'errorDuplicate' => $resultado['existente'] ?? null,
                 'formData' => $dados,
-<<<<<<< HEAD
                 'pregoesR0' => (new PregaoModel())->getPregoesParaRepeticao(),
-=======
-                'pregoesR0' => (new PregaoModel())->getBasesR0(),
->>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
                 'tiposItem' => $amostras->listarTiposLicitados(),
                 'tiposParecer' => $amostras->listarTiposParecer(),
                 'responsaveis' => $amostras->listarResponsaveis(),
@@ -83,7 +71,6 @@ class AmostrasController extends BaseController
         exit;
     }
 
-<<<<<<< HEAD
     public function criarEmpresa(): void
     {
         Auth::requireLevel(3);
@@ -110,8 +97,6 @@ class AmostrasController extends BaseController
         }
     }
 
-=======
->>>>>>> 99e3d7fbbbc5fdcfa5e4bd8d2744761b3c0623b7
     private function coletarDados(array $input): array
     {
         return [
