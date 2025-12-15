@@ -14,8 +14,12 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Copiando dados para a tabela coteli.auditoria: ~5 rows (aproximadamente)
-REPLACE INTO `auditoria` (`id_auditoria`, `id_usuario`, `acao`, `entidade`, `id_entidade`, `campos_alterados`, `dados_anteriores`, `dados_novos`, `ip`, `user_agent`, `criado_em`) VALUES
+-- Copiando dados para a tabela coteli.amostras: ~0 rows (aproximadamente)
+REPLACE INTO `amostras` (`id_amostras`, `id_base_amostra`, `id_momento_cadastro`, `item_licitado`, `id_tipos_licitados`, `total_unidades`, `id_responsavel`, `id_empresa`, `observacoes`, `entregue_coteli`, `chegada_coteli`, `saida_coteli`, `id_tipos_parecer`, `data_parecer`, `selecionar_impressao`, `data_cadastro`) VALUES
+	(1, 9, 1765826809, '01', 3, 1.00, 3, 50, 'kçlkçklçl uiuuui', 1, '2025-12-15 00:00:00', NULL, 1, NULL, 0, '2025-12-15 16:26:49');
+
+-- Copiando dados para a tabela coteli.auditoria: ~0 rows (aproximadamente)
+REPLACE INTO `auditoria` (`id_auditoria`, `id_usuario`, `acao_auditoria`, `entidade_auditoria`, `id_entidade`, `campos_alterados`, `dados_anteriores`, `dados_novos`, `ip_auditoria`, `user_agent`, `criado_em`) VALUES
 	(1, 1, 'LOGIN_SUCESSO', 'usuarios', '1', NULL, NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0', '2025-12-07 06:22:26'),
 	(2, 1, 'LOGOUT', 'usuarios', '1', NULL, NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0', '2025-12-07 06:43:58'),
 	(3, 1, 'LOGIN_SUCESSO', 'usuarios', '1', NULL, NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0', '2025-12-07 06:44:01'),
@@ -42,11 +46,11 @@ REPLACE INTO `auditoria` (`id_auditoria`, `id_usuario`, `acao`, `entidade`, `id_
 	(24, 1, 'LOGOUT', 'usuarios', '1', NULL, NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0', '2025-12-12 21:03:05'),
 	(25, 1, 'LOGIN_SUCESSO', 'usuarios', '1', NULL, NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0', '2025-12-12 21:08:22'),
 	(26, 1, 'LOGOUT', 'usuarios', '1', NULL, NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0', '2025-12-12 21:25:27'),
-	(27, 1, 'LOGIN_SUCESSO', 'usuarios', '1', NULL, NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0', '2025-12-14 04:02:19');
+	(27, 1, 'LOGIN_SUCESSO', 'usuarios', '1', NULL, NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0', '2025-12-14 04:02:19'),
+	(28, 1, 'LOGIN_SUCESSO', 'usuarios', '1', NULL, NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0', '2025-12-15 17:35:57'),
+	(29, 1, 'LOGIN_SUCESSO', 'usuarios', '1', NULL, NULL, NULL, '152.92.198.101', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0', '2025-12-15 18:26:10');
 
--- Copiando dados para a tabela coteli.base_amostras: ~0 rows (aproximadamente)
-
--- Copiando dados para a tabela coteli.base_pregoes: ~2 rows (aproximadamente)
+-- Copiando dados para a tabela coteli.base_pregoes: ~0 rows (aproximadamente)
 REPLACE INTO `base_pregoes` (`id_base_pregoes`, `id_tipo_pregao`, `ano_pregao`, `id_pregao`, `id_pregao_repeticao`, `data_pregao`, `hora_pregao`, `id_status`, `id_origem_pedido`, `processo_sei`, `objeto_licitado`, `data_do`, `id_pregoeiro`, `id_responsavel_coteli`, `lancado_site_uerj`, `data_status`, `created_at`, `updated_at`) VALUES
 	(5, 1, '2025', '001', 0, '2026-01-15', '10:00:00', 1, 2, 'SEI-012345/612345/2365', '51313dfsfddf', '2026-01-16', 5, 2, 0, NULL, '2025-12-07 09:46:13', '2025-12-07 09:46:13'),
 	(6, 1, '2025', '002', 0, '2026-01-10', '10:00:00', 1, 4, 'SEI-123567/987123/4568', 'sdfsdfdsf', NULL, NULL, 2, 0, NULL, '2025-12-07 17:25:06', '2025-12-07 17:25:06'),
@@ -55,7 +59,12 @@ REPLACE INTO `base_pregoes` (`id_base_pregoes`, `id_tipo_pregao`, `ano_pregao`, 
 	(9, 1, '2025', '001', 1, '2026-01-15', '10:00:00', 1, 2, 'SEI-012345/612345/2365', '51313dfsfddf', '2026-01-15', 5, 2, 0, NULL, '2025-12-12 04:19:23', '2025-12-12 04:19:23'),
 	(10, 2, '2025', '001', 1, '2026-01-20', '10:00:00', 1, 4, 'SEI-653132/132132/3322', 'coisas comuns\r\noutras coisas e mais coisas', '2026-01-20', NULL, 2, 0, NULL, '2025-12-12 05:06:13', '2025-12-12 05:06:13'),
 	(11, 3, '2025', '001', 0, '2026-01-14', '10:00:00', 1, 4, 'SEI-230321/313131/2313', '96464 6f54v6d44f65v415321', '2026-01-14', 3, 2, 0, NULL, '2025-12-12 05:18:51', '2025-12-12 05:18:51'),
-	(12, 2, '2025', '001', 2, '2025-12-16', '10:00:00', 1, 4, 'SEI-653132/132132/3322', 'coisas comuns\r\noutras coisas e mais coisas', '2025-12-16', NULL, 1, 0, NULL, '2025-12-12 05:47:41', '2025-12-12 05:47:41');
+	(12, 2, '2025', '001', 2, '2025-12-16', '10:00:00', 1, 4, 'SEI-653132/132132/3322', 'coisas comuns\r\noutras coisas e mais coisas', '2025-12-16', NULL, 1, 0, NULL, '2025-12-12 05:47:41', '2025-12-12 05:47:41'),
+	(13, 1, '2025', '004', 0, '2026-01-12', '10:00:00', 1, 2, 'SEI-645354/546546/4654', 'muitas coisas', '2026-01-10', 5, 4, 0, NULL, '2025-12-15 17:45:51', '2025-12-15 17:45:51'),
+	(14, 1, '2025', '005', 0, '2026-01-10', '10:00:00', 1, 2, 'SEI-987897/987987/9789', 'hn,sna,n,nk,', '2026-01-10', 5, 1, 0, NULL, '2025-12-15 18:57:07', '2025-12-15 18:57:07'),
+	(15, 2, '2025', '002', 0, '2026-01-08', '10:00:00', 1, 2, 'SEI-351313/132131/3213', 'daçlsfakça sfa as a sa a fsfa \'', '2026-01-08', 5, 1, 0, NULL, '2025-12-15 18:58:15', '2025-12-15 18:58:15'),
+	(16, 2, '2025', '003', 0, '2026-01-05', '10:00:00', 1, 2, 'SEI-321111/132321/1321', '13f13f1321fgd1331 32 beb3232 32eb', '2026-01-05', 5, 4, 0, NULL, '2025-12-15 19:04:34', '2025-12-15 19:04:34'),
+	(17, 2, '2025', '002', 1, '2026-01-06', '10:00:00', 1, 2, 'SEI-351313/132131/3213', 'daçlsfakça sfa as a sa a fsfa \'', '2026-01-05', NULL, 2, 0, NULL, '2025-12-15 19:10:19', '2025-12-15 19:10:19');
 
 -- Copiando dados para a tabela coteli.empresas: ~0 rows (aproximadamente)
 REPLACE INTO `empresas` (`id_empresas`, `nome_empresas`, `cnpj_empresas`, `email_empresas`, `telefone_empresas`, `status_empresas`) VALUES
@@ -332,7 +341,7 @@ REPLACE INTO `empresas` (`id_empresas`, `nome_empresas`, `cnpj_empresas`, `email
 	(271, 'WM WORLD', NULL, NULL, NULL, 1),
 	(272, 'ZAMMI', NULL, NULL, NULL, 1);
 
--- Copiando dados para a tabela coteli.origens_pedido: ~4 rows (aproximadamente)
+-- Copiando dados para a tabela coteli.origens_pedido: ~0 rows (aproximadamente)
 REPLACE INTO `origens_pedido` (`id_origens_pedido`, `unidade_origem`) VALUES
 	(1, 'HUPE'),
 	(2, 'PPC'),
@@ -340,36 +349,36 @@ REPLACE INTO `origens_pedido` (`id_origens_pedido`, `unidade_origem`) VALUES
 	(4, 'FCM/UERJ'),
 	(5, 'UERJ');
 
--- Copiando dados para a tabela coteli.status_pregao: ~4 rows (aproximadamente)
+-- Copiando dados para a tabela coteli.status_pregao: ~0 rows (aproximadamente)
 REPLACE INTO `status_pregao` (`id_status_pregao`, `nome_status_pregao`) VALUES
 	(1, 'Em Andamento'),
 	(2, 'Suspenso'),
 	(3, 'Adiado'),
 	(4, 'Revogado');
 
--- Copiando dados para a tabela coteli.tipos_licitados: ~4 rows (aproximadamente)
+-- Copiando dados para a tabela coteli.tipos_licitados: ~0 rows (aproximadamente)
 REPLACE INTO `tipos_licitados` (`id_tipos_licitados`, `nome_tipos_licitados`) VALUES
 	(1, 'Item'),
 	(2, 'Grupo de Itens'),
 	(3, 'Global'),
 	(4, 'Lote (subdivisão do item)');
 
--- Copiando dados para a tabela coteli.tipos_parecer: ~4 rows (aproximadamente)
+-- Copiando dados para a tabela coteli.tipos_parecer: ~0 rows (aproximadamente)
 REPLACE INTO `tipos_parecer` (`id_tipos_parecer`, `nome_tipos_parecer`) VALUES
 	(1, '[aguardando]'),
 	(2, 'aprovado'),
 	(3, 'reprovado'),
 	(4, 'não testado');
 
--- Copiando dados para a tabela coteli.tipos_pregao: ~4 rows (aproximadamente)
+-- Copiando dados para a tabela coteli.tipos_pregao: ~0 rows (aproximadamente)
 REPLACE INTO `tipos_pregao` (`id_tipos_pregao`, `nome_tipos_pregao`, `sigla_tipos_pregao`) VALUES
 	(1, 'Pregão Eletrônico', 'PE'),
 	(2, 'Dispensa', 'PED'),
 	(3, 'Concorrência', 'CP'),
 	(4, 'Compras.Net', 'CN');
 
--- Copiando dados para a tabela coteli.usuarios: ~5 rows (aproximadamente)
-REPLACE INTO `usuarios` (`id_usuarios`, `nome_completo`, `login`, `email`, `senha_hash`, `nivel_acesso`, `is_pregoeiro`, `is_responsavel_coteli`, `ativo`, `trocar_senha`, `criado_em`, `atualizado_em`) VALUES
+-- Copiando dados para a tabela coteli.usuarios: ~0 rows (aproximadamente)
+REPLACE INTO `usuarios` (`id_usuarios`, `nome_completo`, `login_usuario`, `email_usuario`, `senha_hash`, `nivel_acesso`, `is_pregoeiro`, `is_responsavel_coteli`, `ativo_usuario`, `trocar_senha`, `criado_em`, `atualizado_em`) VALUES
 	(1, 'Toni Henriques', 'tonihenriques', 'oliveira.toni@uerj.br', '$2y$10$ecvt9iHPfC32dDeFn2RxteiJi7IKDwNAMujzkI.w6LBJ6o1XCOucu', 5, 1, 1, 1, 0, '2025-12-07 06:22:07', '2025-12-12 20:30:17'),
 	(2, 'Monique', 'monique', 'monique@uerj.br', '', 4, 0, 1, 1, 0, '2025-12-07 09:16:43', '2025-12-12 20:30:19'),
 	(3, 'Michelle', 'michelle', 'michelle@uerj.br', '$2y$10$ecvt9iHPfC32dDeFn2RxteiJi7IKDwNAMujzkI.w6LBJ6o1XCOucu', 3, 1, 0, 1, 1, '2025-12-07 09:17:23', '2025-12-12 20:39:24'),
