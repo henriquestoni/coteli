@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /** @var array $tiposPregao */
 /** @var array $origensPedido */
 /** @var array $statusPregao */
@@ -28,7 +28,7 @@
         <div class="alert alert-success mb-0">
             <?= htmlspecialchars($successMessage, ENT_QUOTES, 'UTF-8') ?>
             <?php if (!empty($successPregao)): ?>
-                <div class="small text-muted mt-1">PregÇœo salvo: <?= htmlspecialchars($successPregao, ENT_QUOTES, 'UTF-8') ?></div>
+                <div class="small text-muted mt-1">Pregão salvo: <?= htmlspecialchars($successPregao, ENT_QUOTES, 'UTF-8') ?></div>
             <?php endif; ?>
         </div>
     <?php endif; ?>
@@ -246,15 +246,15 @@
         if (sucessoCadastro) {
             const proxFmt = sucessoProxBase ? String(sucessoProxBase).padStart(3, '0') : '';
             const corpo = `
-                <p class="mb-2">PregÇœo base salvo com sucesso.</p>
-                ${sucessoDescricao ? `<div class="alert alert-light border mb-3"><strong>PregÇœo:</strong> ${sucessoDescricao}</div>` : ''}
-                ${proxFmt ? `<p class="mb-3">PrÇüximo nÇ§mero sugerido: <strong>${proxFmt}</strong>.</p>` : ''}
+                <p class="mb-2">Pregão base salvo com sucesso.</p>
+                ${sucessoDescricao ? `<div class="alert alert-light border mb-3"><strong>Pregão:</strong> ${sucessoDescricao}</div>` : ''}
+                ${proxFmt ? `<p class="mb-3">Próximo número sugerido: <strong>${proxFmt}</strong>.</p>` : ''}
                 <div class="d-flex flex-column gap-2">
-                    <button type="button" class="btn btn-primario" id="btnNovoPregaoSucesso">Cadastrar novo pregÇœo</button>
+                    <button type="button" class="btn btn-primario" id="btnNovoPregaoSucesso">Cadastrar novo pregão</button>
                     <button type="button" class="btn btn-neutro" id="btnCancelarPregaoSucesso">Cancelar</button>
                 </div>
             `;
-            window.coteliModal('PregÇœo salvo', corpo);
+            window.coteliModal('Pregão salvo', corpo);
             setTimeout(() => {
                 const modalEl = document.getElementById('modalInfo');
                 const instance = modalEl ? bootstrap.Modal.getInstance(modalEl) : null;

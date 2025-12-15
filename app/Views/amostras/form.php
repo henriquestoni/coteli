@@ -62,7 +62,17 @@
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label">Identificação:</label>
-                                <input type="text" name="item_licitado" maxlength="3" pattern="\d{3}" class="form-control" value="<?= htmlspecialchars((string)($formData['item_licitado'] ?? '')) ?>" required>
+                                <input
+                                    type="text"
+                                    name="item_licitado"
+                                    maxlength="2"
+                                    pattern="^\d{2}$"
+                                    inputmode="numeric"
+                                    placeholder="00"
+                                    class="form-control"
+                                    value="<?= htmlspecialchars((string)($formData['item_licitado'] ?? '')) ?>"
+                                    required
+                                >
                             </div>
                             <div class="col-md-2">
                                 <label class="form-label">Unidades:</label>
@@ -136,7 +146,7 @@
                             <div class="col-md-6">
                                 <label class="form-label">Status do Parecer:</label>
                                 <select name="id_tipos_parecer" class="form-select" required>
-                                    <option value="">[aguardando]</option>
+                                    <option value="">Selecione...</option>
                                     <?php foreach ($tiposParecer as $tp): ?>
                                         <option value="<?= (int)$tp['id_tipos_parecer'] ?>" <?= ((int)($formData['id_tipos_parecer'] ?? 0) === (int)$tp['id_tipos_parecer']) ? 'selected' : '' ?>>
                                             <?= htmlspecialchars($tp['nome_tipos_parecer'] ?? '') ?>
@@ -166,6 +176,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const inputEmpresa = document.getElementById('inputEmpresaNome');
     const hiddenEmpresa = document.getElementById('idEmpresaHidden');
+    const campoIdent = document.querySelector('input[name="item_licitado"]');
     const datalist = document.getElementById('listaEmpresas');
     const criarEmpresaUrl = '<?= url('amostras/criar-empresa') ?>';
 
@@ -290,6 +301,25 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     };
+
+    if (campoIdent) {
+        const normalizarIdent = () => {
+            const digits = (campoIdent.value || '').replace(/\D/g, '').slice(0, 2);
+            campoIdent.value = digits;
+        };
+        campoIdent.addEventListener('input', normalizarIdent);
+        campoIdent.addEventListener('blur', () => {
+            normalizarIdent();
+            if (campoIdent.value !== '') {
+                campoIdent.value = campoIdent.value.padStart(2, '0');
+            }
+        });
+        // aplica máscara inicial, se já vier um valor
+        normalizarIdent();
+        if (campoIdent.value !== '') {
+            campoIdent.value = campoIdent.value.padStart(2, '0');
+        }
+    }
 
     if (inputEmpresa) {
         inputEmpresa.addEventListener('change', () => {

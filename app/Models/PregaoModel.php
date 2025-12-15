@@ -492,6 +492,7 @@ class PregaoModel extends BaseModel
             $params['uid'] = $userId;
         }
 
+        // regra: só mostrar eventos futuros; no dia atual, respeitar hora corrente
         $sql = <<<SQL
             SELECT
                 b.id_base_pregoes,
@@ -510,7 +511,12 @@ class PregaoModel extends BaseModel
             LEFT JOIN tipos_pregao tp ON tp.id_tipos_pregao = b.id_tipo_pregao
             LEFT JOIN usuarios u1 ON u1.id_usuarios = b.id_pregoeiro
             LEFT JOIN usuarios u2 ON u2.id_usuarios = b.id_responsavel_coteli
-            WHERE b.data_pregao >= CURDATE() {$whereUsuario}
+            WHERE
+                (
+                    b.data_pregao > CURDATE()
+                    OR (b.data_pregao = CURDATE() AND (b.hora_pregao IS NULL OR b.hora_pregao >= CURTIME()))
+                )
+                {$whereUsuario}
             ORDER BY b.data_pregao ASC, b.hora_pregao ASC
             LIMIT :lim
         SQL;

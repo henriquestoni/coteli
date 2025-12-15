@@ -163,4 +163,27 @@ class AmostraModel extends BaseModel
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         return $row ?: null;
     }
+
+    public function listarUltimasAmostras(int $limite = 10): array
+    {
+        $sql = <<<SQL
+            SELECT
+                a.id_amostras,
+                a.item_licitado,
+                a.total_unidades,
+                a.data_cadastro,
+                b.id_pregao,
+                b.ano_pregao,
+                tp.sigla_tipos_pregao
+            FROM amostras a
+            LEFT JOIN base_pregoes b ON b.id_base_pregoes = a.id_base_amostra
+            LEFT JOIN tipos_pregao tp ON tp.id_tipos_pregao = b.id_tipo_pregao
+            ORDER BY a.id_amostras DESC
+            LIMIT :lim
+        SQL;
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':lim', $limite, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+    }
 }

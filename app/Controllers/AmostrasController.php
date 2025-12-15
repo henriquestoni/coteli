@@ -99,9 +99,15 @@ class AmostrasController extends BaseController
 
     private function coletarDados(array $input): array
     {
+        $toNull = static function ($v) {
+            $t = trim((string)$v);
+            return $t === '' ? null : $t;
+        };
+
         return [
             'id_base_amostra'     => (int)($input['id_base_amostra'] ?? 0),
-            'id_momento_cadastro' => $input['id_momento_cadastro'] ?? $this->gerarMomentoCadastro(),
+            // define sempre no servidor para evitar estouro no INT e confiar em valor do form
+            'id_momento_cadastro' => $this->gerarMomentoCadastro(),
             'item_licitado'       => trim((string)($input['item_licitado'] ?? '')),
             'id_tipos_licitados'  => (int)($input['id_tipos_licitados'] ?? 0),
             'total_unidades'      => $input['total_unidades'] === '' ? null : (float)$input['total_unidades'],
@@ -109,15 +115,16 @@ class AmostrasController extends BaseController
             'id_empresa'          => (int)($input['id_empresa'] ?? 0),
             'observacoes'         => trim((string)($input['observacoes'] ?? '')),
             'entregue_coteli'     => !empty($input['entregue_coteli']) ? 1 : 0,
-            'chegada_coteli'      => $input['chegada_coteli'] ?? null,
-            'saida_coteli'        => $input['saida_coteli'] ?? null,
+            'chegada_coteli'      => $toNull($input['chegada_coteli'] ?? null),
+            'saida_coteli'        => $toNull($input['saida_coteli'] ?? null),
             'id_tipos_parecer'    => (int)($input['id_tipos_parecer'] ?? 0),
-            'data_parecer'        => $input['data_parecer'] ?? null,
+            'data_parecer'        => $toNull($input['data_parecer'] ?? null),
         ];
     }
 
     private function gerarMomentoCadastro(): string
     {
-        return date('YmdHis');
+        // Usa timestamp Unix (segundos) para caber no INT do banco
+        return (string)time();
     }
 }
