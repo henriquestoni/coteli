@@ -32,26 +32,26 @@ CREATE TABLE IF NOT EXISTS tipos_parecer (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS empresas (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(150) NOT NULL,
-    documento VARCHAR(32) NULL,
-    email VARCHAR(150) NULL,
-    telefone VARCHAR(50) NULL,
-    status TINYINT NOT NULL DEFAULT 1
+    id_empresas INT AUTO_INCREMENT PRIMARY KEY,
+    nome_empresas VARCHAR(150) NOT NULL,
+    cnpj_empresas VARCHAR(32) NULL,
+    email_empresas VARCHAR(150) NULL,
+    telefone_empresas VARCHAR(50) NULL,
+    status_empresas TINYINT NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Usuários e perfis (pré-cadastro e acesso)
+-- Usuarios e perfis (pre-cadastro e acesso)
 CREATE TABLE IF NOT EXISTS usuarios (
     id_usuarios INT AUTO_INCREMENT PRIMARY KEY,
     nome_completo VARCHAR(150) NOT NULL,
-    login VARCHAR(60) NULL UNIQUE,
-    email VARCHAR(150) NOT NULL UNIQUE,
+    login_usuario VARCHAR(60) NULL UNIQUE,
+    email_usuario VARCHAR(150) NOT NULL UNIQUE,
     senha_hash VARCHAR(255) NULL,
     nivel_acesso TINYINT NULL CHECK (nivel_acesso BETWEEN 1 AND 5),
     is_pregoeiro TINYINT(1) NOT NULL DEFAULT 0,
     is_responsavel_coteli TINYINT(1) NOT NULL DEFAULT 0,
-    ativo TINYINT(1) NOT NULL DEFAULT 1,
-    precisa_trocar_senha TINYINT(1) NOT NULL DEFAULT 0,
+    ativo_usuario TINYINT(1) NOT NULL DEFAULT 1,
+    trocar_senha TINYINT(1) NOT NULL DEFAULT 0,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -84,15 +84,15 @@ CREATE TABLE IF NOT EXISTS base_pregoes (
     CONSTRAINT fk_base_status FOREIGN KEY (id_status) REFERENCES status_pregao (id_status_pregao)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Amostras (referenciam pregões)
+-- Amostras (referenciam pregoes)
 CREATE TABLE IF NOT EXISTS amostras (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_amostras INT AUTO_INCREMENT PRIMARY KEY,
     id_base_amostra INT NOT NULL, -- referencia pregão base ou repetição
     id_momento_cadastro INT NOT NULL,
-    item_licitado VARCHAR(3) NOT NULL, -- máscara 3 dígitos (ex.: 001)
+    item_licitado VARCHAR(3) NOT NULL, -- mascara 3 digitos (ex.: 001)
     id_tipos_licitados INT NULL,
     total_unidades DECIMAL(10,2) NULL,
-    id_responsavel INT NULL, -- responsável COTELI (usuario)
+    id_responsavel INT NULL, -- responsavel COTELI (usuario)
     id_empresa INT NULL,
     observacoes TEXT NULL,
     entregue_coteli TINYINT(1) NOT NULL DEFAULT 0,
@@ -106,21 +106,21 @@ CREATE TABLE IF NOT EXISTS amostras (
     CONSTRAINT fk_amostra_pregao FOREIGN KEY (id_base_amostra) REFERENCES base_pregoes (id_base_pregoes),
     CONSTRAINT fk_amostra_tipo_licitado FOREIGN KEY (id_tipos_licitados) REFERENCES tipos_licitados (id_tipos_licitados),
     CONSTRAINT fk_amostra_responsavel FOREIGN KEY (id_responsavel) REFERENCES usuarios (id_usuarios),
-    CONSTRAINT fk_amostra_empresa FOREIGN KEY (id_empresa) REFERENCES empresas (id),
+    CONSTRAINT fk_amostra_empresa FOREIGN KEY (id_empresa) REFERENCES empresas (id_empresas),
     CONSTRAINT fk_amostra_parecer FOREIGN KEY (id_tipos_parecer) REFERENCES tipos_parecer (id_tipos_parecer)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Trilhas de auditoria
 CREATE TABLE IF NOT EXISTS auditoria (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id_auditoria BIGINT AUTO_INCREMENT PRIMARY KEY,
     id_usuario INT NULL,
-    acao VARCHAR(150) NOT NULL,
-    entidade VARCHAR(100) NOT NULL,
+    acao_auditoria VARCHAR(150) NOT NULL,
+    entidade_auditoria VARCHAR(100) NOT NULL,
     id_entidade VARCHAR(50) NULL,
     campos_alterados JSON NULL,
     dados_anteriores JSON NULL,
     dados_novos JSON NULL,
-    ip VARCHAR(45) NULL,
+    ip_auditoria VARCHAR(45) NULL,
     user_agent VARCHAR(255) NULL,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_auditoria_usuario FOREIGN KEY (id_usuario) REFERENCES usuarios (id_usuarios)

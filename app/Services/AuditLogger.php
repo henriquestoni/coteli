@@ -13,7 +13,7 @@ class AuditLogger extends BaseModel
     public function fetchLatest(int $limit = 50): array
     {
         try {
-            $stmt = $this->db->prepare('SELECT a.*, u.nome_completo FROM auditoria a LEFT JOIN usuarios u ON u.id_usuarios = a.id_usuario ORDER BY a.criado_em DESC LIMIT :lim');
+            $stmt = $this->db->prepare('SELECT a.id_auditoria AS id, a.id_usuario, a.acao_auditoria AS acao, a.entidade_auditoria AS entidade, a.id_entidade, a.campos_alterados, a.dados_anteriores, a.dados_novos, a.ip_auditoria AS ip, a.user_agent, a.criado_em, u.nome_completo FROM auditoria a LEFT JOIN usuarios u ON u.id_usuarios = a.id_usuario ORDER BY a.criado_em DESC LIMIT :lim');
             $stmt->bindValue(':lim', $limit, \PDO::PARAM_INT);
             $stmt->execute();
             return $stmt->fetchAll() ?: [];
@@ -36,7 +36,7 @@ class AuditLogger extends BaseModel
         try {
             $stmt = $this->db->prepare(
                 'INSERT INTO auditoria (
-                    id_usuario, acao, entidade, id_entidade, campos_alterados, dados_anteriores, dados_novos, ip, user_agent
+                    id_usuario, acao_auditoria, entidade_auditoria, id_entidade, campos_alterados, dados_anteriores, dados_novos, ip_auditoria, user_agent
                 ) VALUES (
                     :id_usuario, :acao, :entidade, :id_entidade, :campos, :antes, :depois, :ip, :ua
                 )'

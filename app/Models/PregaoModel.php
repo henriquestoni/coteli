@@ -68,13 +68,13 @@ class PregaoModel extends BaseModel
 
     public function getPregoeiros(): array
     {
-        $stmt = $this->db->query("SELECT id_usuarios, nome_completo FROM usuarios WHERE is_pregoeiro = 1 AND ativo = 1 ORDER BY nome_completo");
+        $stmt = $this->db->query("SELECT id_usuarios, nome_completo FROM usuarios WHERE is_pregoeiro = 1 AND ativo_usuario = 1 ORDER BY nome_completo");
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
     public function getPregoeiroById(int $id): ?array
     {
-        $stmt = $this->db->prepare("SELECT id_usuarios, nome_completo FROM usuarios WHERE id_usuarios = :id AND is_pregoeiro = 1 AND ativo = 1 LIMIT 1");
+        $stmt = $this->db->prepare("SELECT id_usuarios, nome_completo FROM usuarios WHERE id_usuarios = :id AND is_pregoeiro = 1 AND ativo_usuario = 1 LIMIT 1");
         $stmt->execute(['id' => $id]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         return $row ?: null;
@@ -90,7 +90,7 @@ class PregaoModel extends BaseModel
     }
     public function getResponsaveisCoteli(): array
     {
-        $stmt = $this->db->query("SELECT id_usuarios, nome_completo FROM usuarios WHERE is_responsavel_coteli = 1 AND ativo = 1 ORDER BY nome_completo");
+        $stmt = $this->db->query("SELECT id_usuarios, nome_completo FROM usuarios WHERE is_responsavel_coteli = 1 AND ativo_usuario = 1 ORDER BY nome_completo");
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 

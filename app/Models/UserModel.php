@@ -11,7 +11,23 @@ class UserModel extends BaseModel
 {
     public function listAll(): array
     {
-        $sql = 'SELECT * FROM usuarios ORDER BY nome_completo';
+        $sql = <<<SQL
+            SELECT
+                id_usuarios,
+                nome_completo,
+                login_usuario AS login,
+                email_usuario AS email,
+                senha_hash,
+                nivel_acesso,
+                is_pregoeiro,
+                is_responsavel_coteli,
+                ativo_usuario AS ativo,
+                trocar_senha,
+                criado_em,
+                atualizado_em
+            FROM usuarios
+            ORDER BY nome_completo
+        SQL;
         $stmt = $this->db->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
@@ -19,7 +35,7 @@ class UserModel extends BaseModel
     public function createUser(array $data): int
     {
         $senhaHash = password_hash($data['senha'], PASSWORD_DEFAULT);
-        $stmt = $this->db->prepare('INSERT INTO usuarios (nome_completo, email, login, senha_hash, nivel_acesso, ativo, trocar_senha, criado_em, atualizado_em) VALUES (:nome, :email, :login, :senha, :nivel, 1, 0, NOW(), NOW())');
+        $stmt = $this->db->prepare('INSERT INTO usuarios (nome_completo, email_usuario, login_usuario, senha_hash, nivel_acesso, ativo_usuario, trocar_senha, criado_em, atualizado_em) VALUES (:nome, :email, :login, :senha, :nivel, 1, 0, NOW(), NOW())');
         $stmt->execute([
             'nome' => $data['nome_completo'],
             'email' => $data['email'],
@@ -32,7 +48,7 @@ class UserModel extends BaseModel
 
     public function updatePerfil(int $id, array $data): void
     {
-        $stmt = $this->db->prepare('UPDATE usuarios SET nome_completo = :nome, email = :email, login = :login, atualizado_em = NOW() WHERE id_usuarios = :id');
+        $stmt = $this->db->prepare('UPDATE usuarios SET nome_completo = :nome, email_usuario = :email, login_usuario = :login, atualizado_em = NOW() WHERE id_usuarios = :id');
         $stmt->execute([
             'nome' => $data['nome_completo'],
             'email' => $data['email'],
@@ -52,20 +68,26 @@ class UserModel extends BaseModel
 
     public function findById(int $id): ?array
     {
-        $stmt = $this->db->prepare('SELECT * FROM usuarios WHERE id_usuarios = :id LIMIT 1');
+        $stmt = $this->db->prepare('SELECT id_usuarios, nome_completo, login_usuario AS login, email_usuario AS email, senha_hash, nivel_acesso, is_pregoeiro, is_responsavel_coteli, ativo_usuario AS ativo, trocar_senha, criado_em, atualizado_em FROM usuarios WHERE id_usuarios = :id LIMIT 1');
         $stmt->execute(['id' => $id]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($row && !isset($row['precisa_trocar_senha'])) {
+            $row['precisa_trocar_senha'] = $row['trocar_senha'] ?? null;
+        }
         return $row ?: null;
     }
 
     public function findForAuth(string $loginOuEmail): ?array
     {
         try {
-            $stmt = $this->db->prepare('SELECT * FROM usuarios WHERE (login = :login OR email = :login) AND ativo = 1 LIMIT 1');
+            $stmt = $this->db->prepare('SELECT id_usuarios, nome_completo, login_usuario AS login, email_usuario AS email, senha_hash, nivel_acesso, is_pregoeiro, is_responsavel_coteli, ativo_usuario AS ativo, trocar_senha FROM usuarios WHERE (login_usuario = :login OR email_usuario = :login) AND ativo_usuario = 1 LIMIT 1');
             $stmt->execute(['login' => $loginOuEmail]);
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            if ($result && !isset($result['id']) && isset($result['id_usuarios'])) {
+            if ($result && !isset($result['id'])) {
                 $result['id'] = $result['id_usuarios'];
+            }
+            if ($result && !isset($result['precisa_trocar_senha'])) {
+                $result['precisa_trocar_senha'] = $result['trocar_senha'] ?? null;
             }
             return $result ?: null;
         } catch (PDOException $e) {
@@ -75,9 +97,12 @@ class UserModel extends BaseModel
 
     public function findPrecadastradoSemAcesso(string $email): ?array
     {
-        $stmt = $this->db->prepare('SELECT * FROM usuarios WHERE email = :email AND login IS NULL AND senha_hash IS NULL LIMIT 1');
+        $stmt = $this->db->prepare('SELECT id_usuarios, nome_completo, login_usuario AS login, email_usuario AS email, senha_hash, nivel_acesso, is_pregoeiro, is_responsavel_coteli, ativo_usuario AS ativo, trocar_senha FROM usuarios WHERE email_usuario = :email AND login_usuario IS NULL AND senha_hash IS NULL LIMIT 1');
         $stmt->execute(['email' => $email]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($row && !isset($row['precisa_trocar_senha'])) {
+            $row['precisa_trocar_senha'] = $row['trocar_senha'] ?? null;
+        }
         return $row ?: null;
     }
 
@@ -85,7 +110,7 @@ class UserModel extends BaseModel
     {
         $data = $this->normalizarFlags($data);
         $stmt = $this->db->prepare(
-            'INSERT INTO usuarios (nome_completo, email, login, senha_hash, nivel_acesso, is_pregoeiro, is_responsavel_coteli, ativo, precisa_trocar_senha, criado_em, atualizado_em)
+            'INSERT INTO usuarios (nome_completo, email_usuario, login_usuario, senha_hash, nivel_acesso, is_pregoeiro, is_responsavel_coteli, ativo_usuario, trocar_senha, criado_em, atualizado_em)
              VALUES (:nome_completo, :email, NULL, NULL, NULL, :is_pregoeiro, :is_responsavel_coteli, :ativo, 0, NOW(), NOW())'
         );
         $stmt->execute([
@@ -104,10 +129,10 @@ class UserModel extends BaseModel
         $stmt = $this->db->prepare(
             'UPDATE usuarios
              SET nome_completo = :nome_completo,
-                 email = :email,
+                 email_usuario = :email,
                  is_pregoeiro = :is_pregoeiro,
                  is_responsavel_coteli = :is_responsavel_coteli,
-                 ativo = :ativo,
+                 ativo_usuario = :ativo,
                  atualizado_em = NOW()
              WHERE id_usuarios = :id'
         );
@@ -152,13 +177,13 @@ class UserModel extends BaseModel
             $stmt = $this->db->prepare(
                 'UPDATE usuarios
                  SET nome_completo = :nome_completo,
-                     login = :login,
+                     login_usuario = :login,
                      senha_hash = :senha_hash,
                      nivel_acesso = :nivel_acesso,
                      is_pregoeiro = :is_pregoeiro,
                      is_responsavel_coteli = :is_responsavel_coteli,
-                     ativo = 1,
-                     precisa_trocar_senha = 1,
+                     ativo_usuario = 1,
+                     trocar_senha = 1,
                      atualizado_em = NOW()
                  WHERE id_usuarios = :id'
             );
@@ -173,7 +198,7 @@ class UserModel extends BaseModel
             ]);
         } else {
             $stmt = $this->db->prepare(
-                'INSERT INTO usuarios (nome_completo, email, login, senha_hash, nivel_acesso, is_pregoeiro, is_responsavel_coteli, ativo, precisa_trocar_senha, criado_em, atualizado_em)
+                'INSERT INTO usuarios (nome_completo, email_usuario, login_usuario, senha_hash, nivel_acesso, is_pregoeiro, is_responsavel_coteli, ativo_usuario, trocar_senha, criado_em, atualizado_em)
                  VALUES (:nome_completo, :email, :login, :senha_hash, :nivel_acesso, :is_pregoeiro, :is_responsavel_coteli, 1, 1, NOW(), NOW())'
             );
             $stmt->execute([
@@ -211,7 +236,7 @@ class UserModel extends BaseModel
         ];
 
         if ($login !== null) {
-            $sql .= ', login = :login';
+            $sql .= ', login_usuario = :login';
             $params['login'] = $login;
         }
 
@@ -223,13 +248,13 @@ class UserModel extends BaseModel
 
     public function getPregoeiros(): array
     {
-        $stmt = $this->db->query('SELECT id_usuarios, nome_completo FROM usuarios WHERE is_pregoeiro = 1 AND ativo = 1 ORDER BY nome_completo');
+        $stmt = $this->db->query('SELECT id_usuarios, nome_completo FROM usuarios WHERE is_pregoeiro = 1 AND ativo_usuario = 1 ORDER BY nome_completo');
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
     public function getResponsaveisCoteli(): array
     {
-        $stmt = $this->db->query('SELECT id_usuarios, nome_completo FROM usuarios WHERE is_responsavel_coteli = 1 AND ativo = 1 ORDER BY nome_completo');
+        $stmt = $this->db->query('SELECT id_usuarios, nome_completo FROM usuarios WHERE is_responsavel_coteli = 1 AND ativo_usuario = 1 ORDER BY nome_completo');
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
@@ -296,7 +321,7 @@ class UserModel extends BaseModel
 
     private function loginExiste(string $login, ?int $ignoreId = null): bool
     {
-        $sql = 'SELECT COUNT(*) FROM usuarios WHERE login = :login';
+        $sql = 'SELECT COUNT(*) FROM usuarios WHERE login_usuario = :login';
         $params = ['login' => $login];
         if ($ignoreId !== null) {
             $sql .= ' AND id_usuarios <> :id';
@@ -348,6 +373,7 @@ class UserModel extends BaseModel
         $data['is_responsavel_coteli'] = $isResp;
         $data['is_pregoeiro'] = $isPreg;
         $data['ativo'] = isset($data['ativo']) ? (int)!empty($data['ativo']) : 1;
+        $data['ativo_usuario'] = $data['ativo'];
         return $data;
     }
 }

@@ -13,7 +13,7 @@
     <div class="card-body row g-3 align-items-end">
         <div class="col-md-6">
             <label class="form-label mb-1">Pregão (R-0 ou R-X)</label>
-            <select name="id_base_pregao" class="form-select">
+            <select name="id_base_amostra" class="form-select">
                 <option value="">Selecione...</option>
                 <?php foreach ($pregoesR0 as $p): ?>
                     <?php
@@ -64,7 +64,7 @@
                 <?php else: ?>
                     <?php foreach ($amostras as $a): ?>
                         <tr>
-                            <td><?= (int)$a['id_base_amostras'] ?></td>
+                            <td><?= (int)$a['id_amostras'] ?></td>
                             <td><?= htmlspecialchars((string)$a['item_licitado']) ?></td>
                             <td><?= htmlspecialchars((string)($a['nome_empresa'] ?? '')) ?></td>
                             <td><?= htmlspecialchars((string)($a['nome_tipos_parecer'] ?? '')) ?></td>

@@ -40,7 +40,7 @@ Estrutura pensada para ser clara e fácil de manter sem frameworks.
 ### Banco de dados
 Execute `database/schema.sql` no MySQL. As tabelas de pregões e amostras possuem chaves únicas para garantir:
 - Pregões: `UNIQUE(id_tipo_pregao, ano_pregao, id_pregao, id_pregao_repeticao)` (R-0 e R-X).
-- Amostras: `UNIQUE(id_base_amostra, item_licitado, id_tipo_parecer)` com regra de modal de conflito.
+- Amostras: `UNIQUE(id_base_amostra, item_licitado, id_tipos_parecer)` com regra de modal de conflito.
 
 ### Autenticação e níveis
 - Usuários: campos `login`, `email`, `senha_hash` (`password_hash/password_verify`), `nivel_acesso` (1 a 5), `ativo`.

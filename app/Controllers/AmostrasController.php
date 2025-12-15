@@ -12,7 +12,7 @@ class AmostrasController extends BaseController
     public function index(): void
     {
         Auth::requireLevel(2);
-        $pregaoId = isset($_GET['id_base_pregao']) ? (int)$_GET['id_base_pregao'] : 0;
+        $pregaoId = isset($_GET['id_base_amostra']) ? (int)$_GET['id_base_amostra'] : 0;
 
         $pregoesModel = new PregaoModel();
         $amostrasModel = new AmostraModel();
@@ -67,7 +67,7 @@ class AmostrasController extends BaseController
             return;
         }
 
-        header('Location: ' . url('amostras?id_base_pregao=' . (int)$dados['id_base_pregao']));
+        header('Location: ' . url('amostras?id_base_amostra=' . (int)$dados['id_base_amostra']));
         exit;
     }
 
@@ -100,10 +100,10 @@ class AmostrasController extends BaseController
     private function coletarDados(array $input): array
     {
         return [
-            'id_base_pregao'      => (int)($input['id_base_pregao'] ?? 0),
+            'id_base_amostra'     => (int)($input['id_base_amostra'] ?? 0),
             'id_momento_cadastro' => $input['id_momento_cadastro'] ?? $this->gerarMomentoCadastro(),
             'item_licitado'       => trim((string)($input['item_licitado'] ?? '')),
-            'id_tipo_item'        => (int)($input['id_tipo_item'] ?? 0),
+            'id_tipos_licitados'  => (int)($input['id_tipos_licitados'] ?? 0),
             'total_unidades'      => $input['total_unidades'] === '' ? null : (float)$input['total_unidades'],
             'id_responsavel'      => (int)($input['id_responsavel'] ?? 0),
             'id_empresa'          => (int)($input['id_empresa'] ?? 0),
@@ -111,7 +111,7 @@ class AmostrasController extends BaseController
             'entregue_coteli'     => !empty($input['entregue_coteli']) ? 1 : 0,
             'chegada_coteli'      => $input['chegada_coteli'] ?? null,
             'saida_coteli'        => $input['saida_coteli'] ?? null,
-            'id_tipo_parecer'     => (int)($input['id_tipo_parecer'] ?? 0),
+            'id_tipos_parecer'    => (int)($input['id_tipos_parecer'] ?? 0),
             'data_parecer'        => $input['data_parecer'] ?? null,
         ];
     }

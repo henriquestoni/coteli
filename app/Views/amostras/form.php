@@ -12,9 +12,9 @@
             <div class="alert alert-warning">
                 Já existe amostra para este pregão + item + parecer.
                 <div class="small mt-2">
-                    ID existente: <?= (int)($errorDuplicate['id_base_amostras'] ?? 0) ?> -
+                    ID existente: <?= (int)($errorDuplicate['id_amostras'] ?? 0) ?> -
                     Item: <?= htmlspecialchars((string)($errorDuplicate['item_licitado'] ?? '')) ?> -
-                    Parecer: <?= htmlspecialchars((string)($errorDuplicate['id_tipo_parecer'] ?? '')) ?>
+                    Parecer: <?= htmlspecialchars((string)($errorDuplicate['id_tipos_parecer'] ?? '')) ?>
                 </div>
                 <div class="small mt-2">Opções: alterar o parecer do registro existente ou cadastrar outra combinação.</div>
             </div>
@@ -27,7 +27,7 @@
 
                     <div class="col-12">
                         <label class="form-label">Selecione o Pregão:</label>
-                        <select name="id_base_pregao" class="form-select" required>
+                        <select name="id_base_amostra" class="form-select" required>
                             <option value="">Selecione...</option>
                             <?php foreach ($pregoesR0 as $p): ?>
                                 <?php
@@ -40,7 +40,7 @@
                                     $labelNumero = ($sigla !== '' ? $sigla . ' ' : '') . $num . '/' . $ano . ' (' . $repLabel . ')';
                                     $label = $labelNumero . ($processo !== '' ? ' - ' . $processo : '');
                                 ?>
-                                <option value="<?= (int)$p['id_base_pregoes'] ?>" <?= ((int)($formData['id_base_pregao'] ?? 0) === (int)$p['id_base_pregoes']) ? 'selected' : '' ?>>
+                                <option value="<?= (int)$p['id_base_pregoes'] ?>" <?= ((int)($formData['id_base_amostra'] ?? 0) === (int)$p['id_base_pregoes']) ? 'selected' : '' ?>>
                                     <?= htmlspecialchars($label) ?>
                                 </option>
                             <?php endforeach; ?>
@@ -51,10 +51,10 @@
                         <div class="row g-2 align-items-center">
                             <div class="col-md-3">
                                 <label class="form-label">Tipo:</label>
-                                <select name="id_tipo_item" class="form-select">
+                                <select name="id_tipos_licitados" class="form-select">
                                     <option value="">Selecione...</option>
                                     <?php foreach ($tiposItem as $t): ?>
-                                        <option value="<?= (int)$t['id_tipos_licitados'] ?>" <?= ((int)($formData['id_tipo_item'] ?? 0) === (int)$t['id_tipos_licitados']) ? 'selected' : '' ?>>
+                                        <option value="<?= (int)$t['id_tipos_licitados'] ?>" <?= ((int)($formData['id_tipos_licitados'] ?? 0) === (int)$t['id_tipos_licitados']) ? 'selected' : '' ?>>
                                             <?= htmlspecialchars($t['nome_tipos_licitados'] ?? '') ?>
                                         </option>
                                     <?php endforeach; ?>
@@ -135,10 +135,10 @@
                         <div class="row g-2">
                             <div class="col-md-6">
                                 <label class="form-label">Status do Parecer:</label>
-                                <select name="id_tipo_parecer" class="form-select" required>
+                                <select name="id_tipos_parecer" class="form-select" required>
                                     <option value="">[aguardando]</option>
                                     <?php foreach ($tiposParecer as $tp): ?>
-                                        <option value="<?= (int)$tp['id_tipos_parecer'] ?>" <?= ((int)($formData['id_tipo_parecer'] ?? 0) === (int)$tp['id_tipos_parecer']) ? 'selected' : '' ?>>
+                                        <option value="<?= (int)$tp['id_tipos_parecer'] ?>" <?= ((int)($formData['id_tipos_parecer'] ?? 0) === (int)$tp['id_tipos_parecer']) ? 'selected' : '' ?>>
                                             <?= htmlspecialchars($tp['nome_tipos_parecer'] ?? '') ?>
                                         </option>
                                     <?php endforeach; ?>
